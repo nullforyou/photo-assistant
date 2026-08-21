@@ -1,5 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../poses/pose_library.dart';
 import 'photo_preview_page.dart';
@@ -36,17 +37,36 @@ class _ShootPageState extends State<ShootPage>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (_controller == null || !_controller!.value.isInitialized) return;
-    if (state == AppLifecycleState.inactive) {
+    // 仅在应用真正退到后台(paused/detached)时释放摄像头，
+    // 避免页面内导航(push 预览页 / pop 回来)触发的 inactive 误杀控制器，
+    // 否则从预览页“重拍”返回会丢失控制器、一直转圈。
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached) {
       _controller?.dispose();
       _controller = null;
     } else if (state == AppLifecycleState.resumed) {
-      _initCamera();
+      // 从后台回来且控制器已被释放时，重新初始化
+      if (_controller == null) _initCamera();
     }
   }
 
   Future<void> _initCamera() async {
     try {
+      // 先确认/请求摄像头权限，否则 Android 上 initialize() 会抛异常
+      final status = await Permission.camera.status;
+      if (!status.isGranted) {
+        final result = await Permission.camera.request();
+        if (!result.isGranted) {
+          if (result.isPermanentlyDenied) {
+            setState(() => _cameraError =
+                '摄像头权限被永久拒绝，请在系统设置中开启后重试');
+          } else {
+            setState(() => _cameraError = '未授予摄像头权限，无法拍照');
+          }
+          return;
+        }
+      }
+
       final cameras = await availableCameras();
       if (cameras.isEmpty) {
         setState(() => _cameraError = '未检测到可用摄像头');
@@ -125,14 +145,26 @@ class _ShootPageState extends State<ShootPage>
 
     final pose = kPoseLibrary[_selectedPose];
 
+    // 相机预览比例：竖屏时交换宽高，避免 Texture 被强制拉伸变形
+    final previewSize = controller.value.previewSize;
+    final isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
+    final boxRatio = (previewSize != null)
+        ? (isPortrait
+            ? previewSize.height / previewSize.width
+            : previewSize.width / previewSize.height)
+        : controller.value.aspectRatio;
+
     return SafeArea(
       child: Stack(
         children: [
-          // 相机预览（全屏铺满，像手机相机一样 cover 裁剪，无黑边）
+          // 相机预览（全屏铺满，cover 裁剪，保持比例不变形）
           Positioned.fill(
-            child: SizedBox.expand(
-              child: FittedBox(
-                fit: BoxFit.cover,
+            child: FittedBox(
+              fit: BoxFit.cover,
+              child: SizedBox(
+                width: boxRatio,
+                height: 1,
                 child: CameraPreview(controller),
               ),
             ),
@@ -295,6 +327,16 @@ class _ShootPageState extends State<ShootPage>
               icon: const Icon(Icons.refresh_rounded),
               label: const Text('重试'),
             ),
+            if (_cameraError != null &&
+                _cameraError!.contains('永久拒绝'))
+              Padding(
+                padding: const EdgeInsets.only(top: 12),
+                child: FilledButton.icon(
+                  onPressed: () => openAppSettings(),
+                  icon: const Icon(Icons.settings_rounded),
+                  label: const Text('去系统设置开启'),
+                ),
+              ),
             const SizedBox(height: 12),
             TextButton(
               onPressed: () => Navigator.of(context).maybePop(),

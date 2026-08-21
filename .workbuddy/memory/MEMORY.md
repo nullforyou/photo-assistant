@@ -1,16 +1,16 @@
 # 拍照助手 · 项目长期备忘
 
-## 本机已有环境（用户预装，勿重复安装）
-- **Flutter SDK**: `D:\Program Files\flutter\flutter_windows_3.47.1-stable`（stable 3.47.1 / Dart 3.13.1）。这是用户已有的，已验证可用，**不要再克隆第二份**。
-- **IntelliJ IDEA**: `D:\Program Files\JetBrains\IntelliJ IDEA 2025.2.6.1`（Flutter 官方支持 IDE，装 Flutter 插件即可）。
-- **Git**: `D:\Program Files\Git`。
-- **项目目录**: `D:\work\photo-assistant`（Dart 包名 `photo_assistant`），欢迎页在 `lib/main.dart`。已从中文路径 `D:\work\拍照助手\photo-assistant` 迁至纯英文路径（中文父目录会搞崩 `flutter analyze` 的 LSP 服务器）。
+## 项目位置（重要变更）
+- **活动项目目录已迁到 `C:\work\photo-assistant`**（与 Flutter Pub 缓存同盘，避免跨盘符 Kotlin 构建 bug）。原 `D:\work\photo-assistant` 副本保留但建议弃用。
+- Flutter SDK: `D:\Program Files\flutter\flutter_windows_3.47.1-stable`（stable 3.47.1 / Dart 3.13.1，用户预装勿重复装）。
+- 包名 `photo_assistant`，欢迎页 `lib/main.dart`，拍照页 `lib/shoot/shoot_page.dart`。
 
-## 重要坑：中文路径会搞崩 `flutter analyze`
-- 项目父目录含中文 `拍照助手`，导致 `flutter analyze` 的 LSP 分析服务器解析路径 JSON 时崩溃（exit 255，报 `FormatException: Unexpected end of input`，卡在 `%E6%89%8B`=“拍”的 URL 编码）。
-- **代码本身没问题**：用 `dart analyze`（`D:\Program Files\flutter\flutter_windows_3.47.1-stable\bin\cache\dart-sdk\bin\dart.exe analyze`）验证通过，No issues found!
-- 建议：把项目移到**纯英文路径**（如 `D:\work\photo-assistant`），可避免 analyze 崩溃及后续 Android/Gradle 对非 ASCII 路径的兼容问题。
+## 构建 release APK 的必做前置（Windows 本机）
+1. `unset HTTP_PROXY HTTPS_PROXY`（系统 Clash 代理 127.0.0.1:7897 会掐 Gradle 下载）。
+2. `export JAVA_TOOL_OPTIONS="-Djava.net.useSystemProxies=false -Dhttp.nonProxyHosts=* -Dhttps.nonProxyHosts=*"`。
+3. 已修的 `android/build.gradle.kts`：给 `camera_android_camerax` 模块 `dependencies.add("implementation","androidx.concurrent:concurrent-futures:1.2.0")`（用 `plugins.withId("com.android.library")`，非 afterEvaluate）。
+4. 装手机：`"$LOCALAPPDATA/Android/Sdk/platform-tools/adb.exe" -s YSE0222628002738 install -r build/app/outputs/flutter-apk/app-release.apk`（设备 ID: YSE0222628002738）。
 
-## 运行前置（尚未完成）
-- 需安装 **Android Studio** 并配置 Android SDK + 模拟器，才能在设备上 `flutter run` 看到欢迎页。
-- IDEA 里 Flutter SDK 路径指向 `D:\Program Files\flutter\flutter_windows_3.47.1-stable`。
+## 注意事项
+- `kotlin.incremental=false`（曾加在 gradle.properties）无效，可删。
+- 火绒实时防护曾被怀疑锁 `.tab` 缓存，但真凶是跨盘符，加白名单非必需。
