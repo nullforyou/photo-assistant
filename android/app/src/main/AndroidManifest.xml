@@ -2,6 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools">
     <!-- 摄像头权限：相机预览与拍照必需，缺少会导致 initialize() 抛异常 -->
     <uses-permission android:name="android.permission.CAMERA" />
+    <!-- 网络权限：姿势列表等接口需要从后端拉取数据 -->
+    <uses-permission android:name="android.permission.INTERNET" />
     <!-- 保存图片到系统相册所需权限（Android 13+ 用 READ_MEDIA_IMAGES） -->
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
