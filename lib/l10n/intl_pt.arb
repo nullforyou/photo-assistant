@@ -1,0 +1,21 @@
+{
+  "@locale": "pt",
+  "appName": "Assistente de Foto",
+  "welcomeSubtitle": "Bem-vindo ao Photo Assistant",
+  "welcomeTagline": "Guia de pose · faça uma pose, capture com um toque",
+  "startShooting": "Começar",
+  "cameraNotDetected": "Nenhuma câmera disponível",
+  "cameraInitFailed": "Falha ao iniciar a câmera: {error}",
+  "captureFailed": "Falha na captura: {error}",
+  "poseGuideTitle": "Posicione-se conforme o contorno",
+  "noPoses": "Nenhuma pose disponível",
+  "cameraUnavailable": "Câmera indisponível",
+  "retry": "Tentar novamente",
+  "back": "Voltar",
+  "photoPreview": "Pré-visualização",
+  "retake": "Refazer",
+  "save": "Salvar",
+  "savedToDownloads": "Salvo em Downloads (visível no álbum)",
+  "savedToAlbum": "Salvo no álbum",
+  "saveFailed": "Falha ao salvar: {error}"
+}

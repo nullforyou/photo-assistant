@@ -19,15 +19,15 @@ List<List<double>> poseToPolylines(Pose pose, {double step = 3.0}) {
     while (dist < metric.length) {
       final pos = metric.getTangentForOffset(dist)?.position;
       if (pos != null) {
-        pts.add(pos.dx / Pose.designWidth);
-        pts.add(pos.dy / Pose.designHeight);
+        pts.add(pos.dx / pose.designWidth);
+        pts.add(pos.dy / pose.designHeight);
       }
       dist += step;
     }
     final last = metric.getTangentForOffset(metric.length)?.position;
     if (last != null) {
-      pts.add(last.dx / Pose.designWidth);
-      pts.add(last.dy / Pose.designHeight);
+      pts.add(last.dx / pose.designWidth);
+      pts.add(last.dy / pose.designHeight);
     }
     if (pts.length >= 4) out.add(pts);
   }

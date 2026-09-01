@@ -1,0 +1,21 @@
+{
+  "@locale": "zh",
+  "appName": "拍照助手",
+  "welcomeSubtitle": "欢迎使用 Photo Assistant",
+  "welcomeTagline": "姿势引导 · 摆好 pose 一键出片",
+  "startShooting": "开始拍照",
+  "cameraNotDetected": "未检测到可用摄像头",
+  "cameraInitFailed": "摄像头初始化失败：{error}",
+  "captureFailed": "拍照失败：{error}",
+  "poseGuideTitle": "按轮廓摆好姿势",
+  "noPoses": "无可用姿势",
+  "cameraUnavailable": "摄像头不可用",
+  "retry": "重试",
+  "back": "返回",
+  "photoPreview": "照片预览",
+  "retake": "重拍",
+  "save": "保存",
+  "savedToDownloads": "已保存到下载（可在相册中查看）",
+  "savedToAlbum": "已保存到相册",
+  "saveFailed": "保存失败：{error}"
+}

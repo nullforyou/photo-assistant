@@ -1,0 +1,21 @@
+{
+  "@locale": "tr",
+  "appName": "Foto Asistanı",
+  "welcomeSubtitle": "Photo Assistant'a Hoş Geldiniz",
+  "welcomeTagline": "Poz rehberi · poz ver, tek dokunuşla çek",
+  "startShooting": "Çekime Başla",
+  "cameraNotDetected": "Kullanılabilir kamera yok",
+  "cameraInitFailed": "Kamera başlatılamadı: {error}",
+  "captureFailed": "Çekim başarısız: {error}",
+  "poseGuideTitle": "Ana hatta göre poz ver",
+  "noPoses": "Kullanılabilir poz yok",
+  "cameraUnavailable": "Kamera kullanılamıyor",
+  "retry": "Tekrar dene",
+  "back": "Geri",
+  "photoPreview": "Foto Önizleme",
+  "retake": "Yeniden çek",
+  "save": "Kaydet",
+  "savedToDownloads": "İndirilenlere kaydedildi (albümde görülebilir)",
+  "savedToAlbum": "Albüme kaydedildi",
+  "saveFailed": "Kaydetme başarısız: {error}"
+}

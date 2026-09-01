@@ -1,44 +1,44 @@
-import 'dart:convert';
-import 'dart:io';
+import 'dart:ui' as ui;
 
-import '../config/app_config.dart';
 import '../poses/pose_data.dart';
 import '../poses/pose_library.dart';
 
-/// 所有后端接口集中在此文件，便于统一查看与维护。
-class Api {
-  static const String _posesPath = '/api/photo-assistant/poses';
+/// 姿势数据层（单机版，不再走接口）。
+///
+/// 数据来自内置打包的本地资源 [kDefaultPoseJson]（lib/poses/pose_data.dart），
+/// 由 scripts/generate_poses_json.py 从仓库 poses.json 生成，三处（WSL 源 /
+/// scripts/_generated_poses.json / 本地打包）保持同步。包含 styles、poses、
+/// 以及 nameI18n / tipsI18n / 风格 nameI18n 多语言文案。
+///
+/// 多语言选取：按系统语言短码（en / zh / zh_Hant / ja / ...）从本地数据中
+/// 就近选取，缺失时回退默认中文。
+class PoseApi {
+  /// 本地打包数据包（单机版唯一数据源，等效原服务端契约）。
+  static PoseResult get defaultResult =>
+      parseDefaultPoseResult(lang: _i18nLangKey());
 
-  /// 拉取完整姿势数据包（含 styles + activeStyle + poses）。
+  /// 读取本地打包的姿势数据。
   ///
-  /// 优先请求后端接口；任何失败都回退到本地内置数据。
+  /// 保留 Future 返回值仅为兼容调用方已有的 `await` 写法；实际为同步返回，
+  /// 不再有任何网络请求。
   static Future<PoseResult> fetchPoseData() async {
-    try {
-      final uri = Uri.parse('${AppConfig.apiBaseUrl}$_posesPath');
-      final client = HttpClient();
-      client.connectionTimeout = AppConfig.apiTimeout;
-      final response =
-          await client.getUrl(uri).then((req) => req.close());
-      if (response.statusCode == 200) {
-        final body = await response.transform(utf8.decoder).join();
-        client.close();
-        final root = jsonDecode(body) as Map<String, dynamic>;
-        final data = (root['data'] is Map)
-            ? root['data'] as Map<String, dynamic>
-            : root;
-        if (data['styles'] is Map && data['poses'] is List) {
-          print('[Api] 使用服务端数据 activeStyle=${data['activeStyle']} '
-              'poses=${(data['poses'] as List).length}');
-          return PoseResult.fromJson(data, fromServer: true);
-        }
-        print('[Api] 接口返回结构不含 styles/poses，使用离线兜底');
-      } else {
-        client.close();
-        print('[Api] 接口 HTTP ${response.statusCode}，使用离线兜底');
-      }
-    } catch (e) {
-      print('[Api] 接口请求异常，使用离线兜底：$e');
+    return parseDefaultPoseResult(lang: _i18nLangKey());
+  }
+
+  /// 多语言选取用的语言 key（如 en / zh / zh_Hant / ja / ko ...）。
+  ///
+  /// 取系统首选 locale：中文区分繁体（zh_Hant）与简体（zh），其余语言直接用
+  /// languageCode 短码，与本地数据中 nameI18n / tipsI18n / 风格 nameI18n 的
+  /// 键对齐。缺失时由解析层回退默认中文 name。
+  static String _i18nLangKey() {
+    final locales = ui.PlatformDispatcher.instance.locales;
+    if (locales.isEmpty) return 'zh';
+    final l = locales.first;
+    final lang = l.languageCode.toLowerCase();
+    if (lang == 'zh') {
+      final script = l.scriptCode?.toLowerCase();
+      return script == 'hant' ? 'zh_hant' : 'zh';
     }
-    return defaultPoseResult;
+    return lang;
   }
 }

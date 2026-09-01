@@ -1,9 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <!-- 摄像头权限：相机预览与拍照必需，缺少会导致 initialize() 抛异常 -->
-    <uses-permission android:name="android.permission.CAMERA" />
-    <!-- 网络权限：姿势列表等接口需要从后端拉取数据 -->
-    <uses-permission android:name="android.permission.INTERNET" />
     <!-- 保存图片到系统相册所需权限（Android 13+ 用 READ_MEDIA_IMAGES） -->
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
@@ -13,6 +9,12 @@
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+
+    <!-- 从接口拉取姿势与光影方案所需网络权限（release 构建也需要） -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- 相机权限：拍照必需。卸载重装后依赖插件自动合并可能不稳定，这里显式声明 -->
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:label="photo_assistant"

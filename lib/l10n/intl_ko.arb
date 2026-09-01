@@ -1,0 +1,21 @@
+{
+  "@locale": "ko",
+  "appName": "포토 어시스턴트",
+  "welcomeSubtitle": "Photo Assistant에 오신 것을 환영합니다",
+  "welcomeTagline": "포즈 가이드 · 포즈를 취하고 한 번에 촬영",
+  "startShooting": "촬영 시작",
+  "cameraNotDetected": "사용 가능한 카메라를 찾을 수 없습니다",
+  "cameraInitFailed": "카메라 초기화 실패: {error}",
+  "captureFailed": "촬영 실패: {error}",
+  "poseGuideTitle": "윤곽에 맞춰 포즈",
+  "noPoses": "사용 가능한 포즈 없음",
+  "cameraUnavailable": "카메라를 사용할 수 없습니다",
+  "retry": "다시 시도",
+  "back": "뒤로",
+  "photoPreview": "사진 미리보기",
+  "retake": "다시 찍기",
+  "save": "저장",
+  "savedToDownloads": "다운로드에 저장됨 (앨범에서 확인)",
+  "savedToAlbum": "앨범에 저장됨",
+  "saveFailed": "저장 실패: {error}"
+}

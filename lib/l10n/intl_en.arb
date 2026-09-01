@@ -1,0 +1,45 @@
+{
+  "@locale": "en",
+  "appName": "Photo Assistant",
+  "welcomeSubtitle": "Welcome to Photo Assistant",
+  "welcomeTagline": "Pose guidance · strike a pose, snap in one tap",
+  "startShooting": "Start Shooting",
+  "cameraNotDetected": "No available camera detected",
+  "cameraInitFailed": "Camera init failed: {error}",
+  "@cameraInitFailed": {
+    "description": "cameraInitFailed",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "captureFailed": "Capture failed: {error}",
+  "@captureFailed": {
+    "description": "captureFailed",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "poseGuideTitle": "Pose along the outline",
+  "noPoses": "No poses available",
+  "cameraUnavailable": "Camera unavailable",
+  "retry": "Retry",
+  "back": "Back",
+  "photoPreview": "Photo Preview",
+  "retake": "Retake",
+  "save": "Save",
+  "savedToDownloads": "Saved to Downloads (viewable in album)",
+  "savedToAlbum": "Saved to album",
+  "saveFailed": "Save failed: {error}",
+  "@saveFailed": {
+    "description": "saveFailed",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  }
+}

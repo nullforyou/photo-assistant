@@ -1,0 +1,21 @@
+{
+  "@locale": "ja",
+  "appName": "フォトアシスタント",
+  "welcomeSubtitle": "Photo Assistant へようこそ",
+  "welcomeTagline": "ポーズガイド · ポーズをとってワンタップで撮影",
+  "startShooting": "撮影を始める",
+  "cameraNotDetected": "利用可能なカメラが見つかりません",
+  "cameraInitFailed": "カメラの初期化に失敗しました：{error}",
+  "captureFailed": "撮影に失敗しました：{error}",
+  "poseGuideTitle": "輪郭に合わせてポーズ",
+  "noPoses": "利用可能なポーズがありません",
+  "cameraUnavailable": "カメラは使用できません",
+  "retry": "再試行",
+  "back": "戻る",
+  "photoPreview": "写真プレビュー",
+  "retake": "撮り直し",
+  "save": "保存",
+  "savedToDownloads": "ダウンロードに保存しました（アルバムで確認可）",
+  "savedToAlbum": "アルバムに保存しました",
+  "saveFailed": "保存に失敗しました：{error}"
+}

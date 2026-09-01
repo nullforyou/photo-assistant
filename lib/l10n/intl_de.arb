@@ -1,0 +1,21 @@
+{
+  "@locale": "de",
+  "appName": "Foto-Assistent",
+  "welcomeSubtitle": "Willkommen bei Photo Assistant",
+  "welcomeTagline": "Posenführung · Pose einnehmen, mit einem Tipp aufnehmen",
+  "startShooting": "Aufnahme starten",
+  "cameraNotDetected": "Keine Kamera verfügbar",
+  "cameraInitFailed": "Kamera-Initialisierung fehlgeschlagen: {error}",
+  "captureFailed": "Aufnahme fehlgeschlagen: {error}",
+  "poseGuideTitle": "Pose entlang der Umrisslinie",
+  "noPoses": "Keine Posen verfügbar",
+  "cameraUnavailable": "Kamera nicht verfügbar",
+  "retry": "Wiederholen",
+  "back": "Zurück",
+  "photoPreview": "Foto-Vorschau",
+  "retake": "Neu aufnehmen",
+  "save": "Speichern",
+  "savedToDownloads": "In Downloads gespeichert (im Album sichtbar)",
+  "savedToAlbum": "In Album gespeichert",
+  "saveFailed": "Speichern fehlgeschlagen: {error}"
+}

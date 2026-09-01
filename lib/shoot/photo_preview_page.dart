@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:photo_assistant/l10n/generated/app_localizations.dart';
 
 import 'photo_saver.dart';
 
@@ -12,10 +13,11 @@ class PhotoPreviewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final s = S.of(context);
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text('照片预览'),
+        title: Text(s.photoPreview),
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
       ),
@@ -41,7 +43,7 @@ class PhotoPreviewPage extends StatelessWidget {
                       ),
                       onPressed: () => Navigator.of(context).pop(),
                       icon: const Icon(Icons.replay_rounded),
-                      label: const Text('重拍'),
+                      label: Text(s.retake),
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -53,12 +55,12 @@ class PhotoPreviewPage extends StatelessWidget {
                       ),
                       onPressed: () async {
                         final messenger = ScaffoldMessenger.of(context);
-                        final msg = await savePhotoToGallery(imageBytes);
+                        final msg = await savePhotoToGallery(imageBytes, context);
                         if (!context.mounted) return;
                         messenger.showSnackBar(SnackBar(content: Text(msg)));
                       },
                       icon: const Icon(Icons.check_rounded),
-                      label: const Text('保存'),
+                      label: Text(s.save),
                     ),
                   ),
                 ],

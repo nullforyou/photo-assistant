@@ -1,0 +1,21 @@
+{
+  "@locale": "th",
+  "appName": "ผู้ช่วยถ่ายภาพ",
+  "welcomeSubtitle": "ยินดีต้อนรับสู่ Photo Assistant",
+  "welcomeTagline": "คู่มือท่าทาง · ถ่ายในหนึ่งแตะ",
+  "startShooting": "เริ่มถ่าย",
+  "cameraNotDetected": "ไม่พบกล้องที่ใช้งานได้",
+  "cameraInitFailed": "การเริ่มต้นกล้องล้มเหลว: {error}",
+  "captureFailed": "การถ่ายภาพล้มเหลว: {error}",
+  "poseGuideTitle": "จัดท่าตามเส้นกรอบ",
+  "noPoses": "ไม่มีท่าทางที่ใช้งานได้",
+  "cameraUnavailable": "กล้องไม่พร้อมใช้งาน",
+  "retry": "ลองอีกครั้ง",
+  "back": "กลับ",
+  "photoPreview": "ตัวอย่างรูปภาพ",
+  "retake": "ถ่ายใหม่",
+  "save": "บันทึก",
+  "savedToDownloads": "บันทึกไปยังดาวน์โหลด (ดูในอัลบั้มได้)",
+  "savedToAlbum": "บันทึกไปยังอัลบั้มแล้ว",
+  "saveFailed": "การบันทึกล้มเหลว: {error}"
+}

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:photo_assistant/l10n/generated/app_localizations.dart';
 
 import 'shoot/shoot_page.dart';
 
@@ -12,7 +14,27 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: '拍照助手',
+      // 跟随系统语言；supportedLocales 决定 App 内可切换的语言集合
+      localizationsDelegates: const [
+        S.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('zh'),
+        Locale('zh', 'Hant'),
+        Locale('en'),
+        Locale('ja'),
+        Locale('ko'),
+        Locale('fr'),
+        Locale('de'),
+        Locale('th'),
+        Locale('pt'),
+        Locale('es'),
+        Locale('tr'),
+      ],
+      title: 'Photo Assistant',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
@@ -28,6 +50,7 @@ class WelcomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final s = S.of(context);
     return Scaffold(
       body: Center(
         child: Padding(
@@ -42,22 +65,22 @@ class WelcomePage extends StatelessWidget {
               ),
               const SizedBox(height: 24),
               Text(
-                '拍照助手',
+                s.appName,
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
               ),
               const SizedBox(height: 12),
               Text(
-                '欢迎使用 Photo Assistant',
+                s.welcomeSubtitle,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: Colors.grey,
                     ),
               ),
               const SizedBox(height: 32),
-              const Text(
-                '姿势引导 · 摆好 pose 一键出片',
-                style: TextStyle(fontSize: 14, color: Colors.grey),
+              Text(
+                s.welcomeTagline,
+                style: const TextStyle(fontSize: 14, color: Colors.grey),
               ),
               const SizedBox(height: 40),
               FilledButton.icon(
@@ -76,9 +99,9 @@ class WelcomePage extends StatelessWidget {
                   );
                 },
                 icon: const Icon(Icons.camera_alt_rounded),
-                label: const Text(
-                  '开始拍照',
-                  style: TextStyle(fontSize: 18),
+                label: Text(
+                  s.startShooting,
+                  style: const TextStyle(fontSize: 18),
                 ),
               ),
             ],

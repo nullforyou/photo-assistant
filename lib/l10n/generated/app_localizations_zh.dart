@@ -1,0 +1,136 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
+
+import 'app_localizations.dart';
+
+// ignore_for_file: type=lint
+
+/// The translations for Chinese (`zh`).
+class SZh extends S {
+  SZh([String locale = 'zh']) : super(locale);
+
+  @override
+  String get appName => '拍照助手';
+
+  @override
+  String get welcomeSubtitle => '欢迎使用 Photo Assistant';
+
+  @override
+  String get welcomeTagline => '姿势引导 · 摆好 pose 一键出片';
+
+  @override
+  String get startShooting => '开始拍照';
+
+  @override
+  String get cameraNotDetected => '未检测到可用摄像头';
+
+  @override
+  String cameraInitFailed(String error) {
+    return '摄像头初始化失败：$error';
+  }
+
+  @override
+  String captureFailed(String error) {
+    return '拍照失败：$error';
+  }
+
+  @override
+  String get poseGuideTitle => '按轮廓摆好姿势';
+
+  @override
+  String get noPoses => '无可用姿势';
+
+  @override
+  String get cameraUnavailable => '摄像头不可用';
+
+  @override
+  String get retry => '重试';
+
+  @override
+  String get back => '返回';
+
+  @override
+  String get photoPreview => '照片预览';
+
+  @override
+  String get retake => '重拍';
+
+  @override
+  String get save => '保存';
+
+  @override
+  String get savedToDownloads => '已保存到下载（可在相册中查看）';
+
+  @override
+  String get savedToAlbum => '已保存到相册';
+
+  @override
+  String saveFailed(String error) {
+    return '保存失败：$error';
+  }
+}
+
+/// The translations for Chinese, using the Han script (`zh_Hant`).
+class SZhHant extends SZh {
+  SZhHant() : super('zh_Hant');
+
+  @override
+  String get appName => '拍照助手';
+
+  @override
+  String get welcomeSubtitle => '歡迎使用 Photo Assistant';
+
+  @override
+  String get welcomeTagline => '姿勢引導 · 擺好 pose 一鍵出片';
+
+  @override
+  String get startShooting => '開始拍照';
+
+  @override
+  String get cameraNotDetected => '未檢測到可用攝像頭';
+
+  @override
+  String cameraInitFailed(String error) {
+    return '攝像頭初始化失敗：$error';
+  }
+
+  @override
+  String captureFailed(String error) {
+    return '拍照失敗：$error';
+  }
+
+  @override
+  String get poseGuideTitle => '按輪廓擺好姿勢';
+
+  @override
+  String get noPoses => '無可用姿勢';
+
+  @override
+  String get cameraUnavailable => '攝像頭不可用';
+
+  @override
+  String get retry => '重試';
+
+  @override
+  String get back => '返回';
+
+  @override
+  String get photoPreview => '照片預覽';
+
+  @override
+  String get retake => '重拍';
+
+  @override
+  String get save => '保存';
+
+  @override
+  String get savedToDownloads => '已保存到下載（可在相冊中查看）';
+
+  @override
+  String get savedToAlbum => '已保存到相冊';
+
+  @override
+  String saveFailed(String error) {
+    return '保存失敗：$error';
+  }
+}

@@ -9,10 +9,10 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # followed by an optional build number separated by a +.
 # Both the version and the builder number may be overridden in flutter
 # build by specifying --build-name and --build-number, respectively.
-# In Android, build-name is used as versionName while build-number used as versionCode.
+# In Android, build-name is used as versionName while build-number is used as versionCode.
 # Read more about Android versioning at https://developer.android.com/studio/publish/versioning
 # In iOS, build-name is used as CFBundleShortVersionString while build-number is used as CFBundleVersion.
-# Read more about iOS versioning at
+# For more information about versioning, see:
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
@@ -31,10 +31,13 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # 多语言本地化（gen-l10n 生成 S 类，运行期需要 intl）
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.20.3
+
   # 相机预览与拍照
   camera: ^0.11.0+2
-  # 运行时请求摄像头/存储等系统权限
-  permission_handler: ^11.4.0
   # 照片文件保存路径
   path_provider: ^2.1.4
   # 原生端（Android/iOS/HarmonyOS）保存图片到系统相册
@@ -61,10 +64,16 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
 
+  # 开启 gen-l10n：根据 lib/l10n/*.arb 自动生成 S 类（多语言文案）
+  generate: true
+
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+    - assets/poses/
 
   # To add assets to your application, add an assets section, like this:
   # assets:
@@ -79,9 +88,11 @@ flutter:
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
-  # "family" key with the font family name, and a "fonts" key with a
-  # list giving the asset and other descriptors for the font. For
-  # example:
+  # "family" key with the font family name, and a "fonts" key with the
+  # font file(s) with the appropriate family, style, and weight names.
+  # Optionally you can specify the asset as a list containing the font
+  # file path and a list of font weights/styles.
+  # For example:
   # fonts:
   #   - family: Schyler
   #     fonts:

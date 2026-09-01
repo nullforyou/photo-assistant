@@ -1,17 +1,19 @@
+import 'dart:ui' as ui;
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter/services.dart';
+import 'package:photo_assistant/l10n/generated/app_localizations.dart';
 
 import '../api/api.dart';
-import '../poses/pose_data.dart';
 import '../poses/pose_library.dart';
 import 'photo_preview_page.dart';
 import 'pose_painter.dart';
 
 /// 拍照页：后置摄像头预览 + 发光人形姿势引导 + 底部姿势切换 + 快门。
 ///
-/// 姿势与光影方案由接口下发（[Api]），默认跟随接口 activeStyle；
-/// 顶部风格条可在本地临时预览/对比不同方案，不影响接口控制。
+/// 姿势与光影方案来自本地打包数据（[PoseApi]，单机版唯一数据源），
+/// 默认跟随数据 activeStyle；顶部风格条可在本地临时预览/对比不同方案。
 class ShootPage extends StatefulWidget {
   const ShootPage({super.key});
 
@@ -25,13 +27,25 @@ class _ShootPageState extends State<ShootPage>
   String? _cameraError;
   bool _isCapturing = false;
   int _selectedPose = 0;
+  bool _cameraInitializing = false;
 
-  /// 接口下发的完整数据包（默认先用内置兜底，加载完成后替换为接口数据）。
-  PoseResult _result = defaultPoseResult;
-  List<Pose> _poses = defaultPoseResult.poses;
+  /// 本地打包的完整数据包（单机版唯一数据源）。
+  PoseResult _result = PoseApi.defaultResult;
+  List<Pose> _poses = PoseApi.defaultResult.poses;
 
-  /// 本地预览覆盖的风格 id；为 null 时跟随接口 activeStyle。
+  /// 本地数据是否已加载完成。未加载完成前不渲染 tips，
+  /// 避免加载瞬间闪出一个“默认 tip”。
+  bool _posesLoaded = false;
+
+  /// 本地预览覆盖的风格 id；为 null 时跟随数据 activeStyle。
   String? _styleOverride;
+
+  /// 姿势层的用户手势变换：缩放比例与位移（屏幕像素）。0.3~4 倍可缩放，位移可拖动。
+  double _poseScale = 1.0;
+  Offset _poseOffset = Offset.zero;
+  double _gestureBaseScale = 1.0;
+  Offset _gestureBaseOffset = Offset.zero;
+  Offset _gestureStartFocal = Offset.zero;
 
   int get _safeIndex =>
       _poses.isEmpty ? 0 : _selectedPose.clamp(0, _poses.length - 1);
@@ -47,8 +61,8 @@ class _ShootPageState extends State<ShootPage>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    _loadPoses();
     _initCamera();
+    _loadPoses();
   }
 
   @override
@@ -60,55 +74,53 @@ class _ShootPageState extends State<ShootPage>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused ||
+    // 息屏 / 切后台 / 失去焦点时释放摄像头，回到前台时重建。
+    // 注意：resumed 分支绝不能加「_controller==null 就 return」的前置判断——
+    // inactive 已把 _controller 置空，若 resumed 直接返回，重建永远不执行，
+    // 页面就会停在黑屏转圈。这里只要没有「已初始化」的控制器就必须重建。
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.paused ||
         state == AppLifecycleState.detached) {
       _controller?.dispose();
       _controller = null;
     } else if (state == AppLifecycleState.resumed) {
-      if (_controller == null) _initCamera();
+      if (_controller == null || !_controller!.value.isInitialized) {
+        _initCamera();
+      }
     }
   }
 
   Future<void> _loadPoses() async {
-    final result = await Api.fetchPoseData();
+    final result = await PoseApi.fetchPoseData();
     if (!mounted) return;
     setState(() {
       _result = result;
       _poses = result.poses;
       if (_selectedPose >= _poses.length) _selectedPose = 0;
+      _posesLoaded = true;
     });
   }
 
   Future<void> _initCamera() async {
+    if (_cameraInitializing) return;
+    _cameraInitializing = true;
     try {
-      final status = await Permission.camera.status;
-      if (!status.isGranted) {
-        final result = await Permission.camera.request();
-        if (!result.isGranted) {
-          if (result.isPermanentlyDenied) {
-            setState(() =>
-                _cameraError = '摄像头权限被永久拒绝，请在系统设置中开启后重试');
-          } else {
-            setState(() => _cameraError = '未授予摄像头权限，无法拍照');
-          }
-          return;
-        }
-      }
-
       final cameras = await availableCameras();
       if (cameras.isEmpty) {
-        setState(() => _cameraError = '未检测到可用摄像头');
+        setState(() => _cameraError = S.of(context).cameraNotDetected);
         return;
       }
-      final back =
-          cameras.where((c) => c.lensDirection == CameraLensDirection.back).toList();
+      final back = cameras
+          .where((c) => c.lensDirection == CameraLensDirection.back)
+          .toList();
       final camera = back.isNotEmpty ? back.first : cameras.first;
 
       final controller = CameraController(
         camera,
         ResolutionPreset.high,
         enableAudio: false,
-        imageFormatGroup: ImageFormatGroup.jpeg,
+        // 注意：不要指定 imageFormatGroup=jpeg。部分 Android 机型在 jpeg
+        // 格式组下预览纹理会整片黑（但拍照正常）。用默认 yuv420 兼容性最好。
       );
       await controller.initialize();
       if (!mounted) {
@@ -120,9 +132,11 @@ class _ShootPageState extends State<ShootPage>
         _cameraError = null;
       });
     } on CameraException catch (e) {
-      setState(() => _cameraError = '摄像头初始化失败：${e.description ?? e.code}');
+      setState(() => _cameraError = S.of(context).cameraInitFailed(e.description ?? e.code));
     } catch (e) {
-      setState(() => _cameraError = '摄像头初始化失败：$e');
+      setState(() => _cameraError = S.of(context).cameraInitFailed(e.toString()));
+    } finally {
+      _cameraInitializing = false;
     }
   }
 
@@ -142,12 +156,50 @@ class _ShootPageState extends State<ShootPage>
     } on CameraException catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('拍照失败：${e.description ?? e.code}')),
+          SnackBar(content: Text(S.of(context).captureFailed(e.description ?? e.code))),
         );
       }
     } finally {
       if (mounted) setState(() => _isCapturing = false);
     }
+  }
+
+  void _onScaleStart(ScaleStartDetails d) {
+    _gestureBaseScale = _poseScale;
+    _gestureBaseOffset = _poseOffset;
+    _gestureStartFocal = d.localFocalPoint;
+  }
+
+  void _onScaleUpdate(ScaleUpdateDetails d) {
+    setState(() {
+      _poseScale = (_gestureBaseScale * d.scale).clamp(0.3, 4.0);
+      _poseOffset = _gestureBaseOffset + (d.localFocalPoint - _gestureStartFocal);
+    });
+  }
+
+  void _resetPoseTransform() {
+    setState(() {
+      _poseScale = 1.0;
+      _poseOffset = Offset.zero;
+    });
+  }
+
+  /// 当前姿势在预览中的完整变换矩阵（基础变换 + 用户缩放/位移），
+  /// 供姿势层与提示气泡对齐使用。
+  Matrix4 _poseMatrix(Size size) {
+    final base = PosePainter.transformFor(size, 0.5,
+        designWidth: _currentPose.designWidth,
+        designHeight: _currentPose.designHeight);
+    if (_poseScale == 1.0 && _poseOffset == Offset.zero) return base;
+    final cx = size.width / 2;
+    final cy = size.height / 2;
+    final m = Matrix4.identity()
+      ..translate(_poseOffset.dx, _poseOffset.dy)
+      ..translate(cx, cy)
+      ..scale(_poseScale, _poseScale)
+      ..translate(-cx, -cy);
+    m.multiply(base);
+    return m;
   }
 
   @override
@@ -172,51 +224,36 @@ class _ShootPageState extends State<ShootPage>
     final pose = _currentPose;
     final style = _effectiveStyle;
 
-    // 相机预览比例
-    final previewSize = controller.value.previewSize;
-    final isPortrait =
-        MediaQuery.of(context).orientation == Orientation.portrait;
-    final boxRatio = (previewSize != null)
-        ? (isPortrait
-            ? previewSize.height / previewSize.width
-            : previewSize.width / previewSize.height)
-        : controller.value.aspectRatio;
-
     return SafeArea(
       child: Stack(
         children: [
-          // 相机预览
+          // 相机预览（全屏铺满；CameraPreview 自身按父容器尺寸做 cover 裁剪）
           Positioned.fill(
-            child: FittedBox(
-              fit: BoxFit.cover,
-              child: SizedBox(
-                width: boxRatio,
-                height: 1,
-                child: CameraPreview(controller),
-              ),
-            ),
+            child: CameraPreview(controller),
           ),
-          // 发光人形姿势引导层
+          // 发光人形姿势引导层（不会拍进照片）——支持双指缩放/拖动，双击复位
           Positioned.fill(
-            child: IgnorePointer(
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onScaleStart: _onScaleStart,
+              onScaleUpdate: _onScaleUpdate,
+              onDoubleTap: _resetPoseTransform,
               child: Stack(
                 children: [
-                  Positioned.fill(
-                    child: CustomPaint(
-                      painter: PosePainter(
-                        pose: pose,
-                        style: style,
-                        fillRatio: 0.5,
-                      ),
-                    ),
+                  _PoseLayer(
+                    pose: pose,
+                    style: style,
+                    fillRatio: 0.5,
+                    userScale: _poseScale,
+                    userOffset: _poseOffset,
                   ),
-                  if (style.showTips && pose.tips.isNotEmpty)
+                  if (_posesLoaded && style.showTips && pose.tips.isNotEmpty)
                     _buildTipsOverlay(style, pose),
                 ],
               ),
             ),
           ),
-          // 顶部：姿势信息 + 风格状态 + 风格条
+          // 顶部：姿势信息 + 光影方案本地预览条
           Positioned(
             top: 44,
             left: 8,
@@ -224,47 +261,47 @@ class _ShootPageState extends State<ShootPage>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.45),
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Text(
-                    '姿势 ${_safeIndex + 1}/${_poses.length} · ${pose.name} · 按轮廓摆好姿势',
-                    style:
-                        const TextStyle(color: Colors.tealAccent, fontSize: 13),
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  _result.fromServer
-                      ? '● 接口生效 · ${_result.activeStyle}'
-                      : '○ 离线兜底 · ${_result.activeStyle}',
-                  style: TextStyle(
-                    fontSize: 10,
-                    color: _result.fromServer
-                        ? Colors.greenAccent
-                        : Colors.orangeAccent,
-                  ),
-                ),
-                const SizedBox(height: 8),
                 _buildStyleBar(),
               ],
             ),
           ),
-          // 顶部返回
+          // 顶部行：返回键 + 居中文字「按轮廓摆好姿势」
           Positioned(
             top: 8,
             left: 8,
-            child: IconButton(
-              icon: const Icon(Icons.arrow_back_ios_new_rounded,
-                  color: Colors.white70),
-              onPressed: () => Navigator.of(context).maybePop(),
+            right: 8,
+            child: Row(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.arrow_back_ios_new_rounded,
+                      color: Colors.white70),
+                  onPressed: () => Navigator.of(context).maybePop(),
+                ),
+                Expanded(
+                  child: Center(
+                    child: Text(
+                      S.of(context).poseGuideTitle,
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.9),
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        shadows: const [
+                          Shadow(
+                            color: Colors.black54,
+                            blurRadius: 6,
+                            offset: Offset(0, 1),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                // 与返回键等宽，保证文字相对居中
+                const SizedBox(width: 48),
+              ],
             ),
           ),
-          // 底部控制区
+          // 底部控制区：快门 + 姿势切换条
           Positioned(
             left: 0,
             right: 0,
@@ -276,13 +313,15 @@ class _ShootPageState extends State<ShootPage>
     );
   }
 
-  /// 顶部光影方案条：默认跟随接口 activeStyle，点击可本地临时预览其它方案。
+  /// 顶部光影方案条：默认跟随接口 activeStyle（高亮项），点击可本地临时预览其它方案。
   Widget _buildStyleBar() {
     final ids = _result.styles.keys.toList();
-    return Wrap(
-      alignment: WrapAlignment.center,
-      spacing: 6,
-      runSpacing: 6,
+    return Padding(
+      padding: const EdgeInsets.only(top: 12),
+      child: Wrap(
+        alignment: WrapAlignment.center,
+        spacing: 6,
+        runSpacing: 6,
       children: [
         for (final id in ids)
           GestureDetector(
@@ -312,26 +351,31 @@ class _ShootPageState extends State<ShootPage>
             ),
           ),
       ],
+      ),
     );
   }
 
-  /// 提示气泡：按关键点定位到屏幕坐标。
+  /// 提示气泡：按设计空间坐标（tip.pos）经与主预览相同的变换定位到屏幕坐标，
+  /// 因此会随姿势层的拖动 / 缩放一起移动，包括被拖出屏幕外。
+  /// 无坐标的 tip 锚到姿势顶部居中（设计空间），同样随图像一起变换，
+  /// 而不是固定钉在屏幕某处。这里不做 clamp，保证 tip 与身体部位同步（可移出屏幕）。
   Widget _buildTipsOverlay(PoseStyle style, Pose pose) {
     return LayoutBuilder(
       builder: (context, constraints) {
         final size = Size(constraints.maxWidth, constraints.maxHeight);
-        final matrix = PosePainter.transformFor(size, 0.5);
+        final matrix = _poseMatrix(size);
         final bubbles = <Widget>[];
         for (var i = 0; i < pose.tips.length; i++) {
-          final pos = i < pose.keyPoints.length
-              ? PosePainter.transformPoint(matrix, pose.keyPoints[i])
-              : null;
-          final left = (pos?.dx ?? size.width / 2) + 12;
-          final top = (pos?.dy ?? 40) - 28;
+          final tip = pose.tips[i];
+          // 有坐标锚到该点；无坐标锚到姿势顶部居中（设计空间），二者都随图像变换
+          final anchor = tip.pos ?? Offset(pose.designWidth / 2, 40);
+          final p = PosePainter.transformPoint(matrix, anchor);
+          final left = p.dx + 12;
+          final top = p.dy - 28;
           bubbles.add(
             Positioned(
-              left: left.clamp(8.0, size.width - 130),
-              top: top.clamp(8.0, size.height - 48),
+              left: left,
+              top: top,
               child: Container(
                 constraints: const BoxConstraints(maxWidth: 130),
                 padding:
@@ -345,7 +389,7 @@ class _ShootPageState extends State<ShootPage>
                   ),
                 ),
                 child: Text(
-                  pose.tips[i],
+                  tip.text,
                   style: TextStyle(
                     color: style.innerColor,
                     fontSize: 12,
@@ -383,18 +427,22 @@ class _ShootPageState extends State<ShootPage>
           SizedBox(
             height: _result.thumbnail.listHeight,
             child: _poses.isEmpty
-                ? const Center(
-                    child: Text('无可用姿势',
-                        style: TextStyle(color: Colors.white54)))
+                ? Center(
+                    child: Text(S.of(context).noPoses,
+                        style: const TextStyle(color: Colors.white54)))
                 : ListView.separated(
                     scrollDirection: Axis.horizontal,
                     itemCount: _poses.length,
-                    separatorBuilder: (_, _) => SizedBox(
-                        width: _result.thumbnail.itemSpacing),
+                    separatorBuilder: (_, _) =>
+                        SizedBox(width: _result.thumbnail.itemSpacing),
                     itemBuilder: (context, index) {
                       final selected = index == _safeIndex;
                       return GestureDetector(
-                        onTap: () => setState(() => _selectedPose = index),
+                        onTap: () => setState(() {
+                          _selectedPose = index;
+                          _poseScale = 1.0;
+                          _poseOffset = Offset.zero;
+                        }),
                         child: Container(
                           width: _result.thumbnail.itemWidth,
                           height: _result.thumbnail.itemHeight,
@@ -410,14 +458,14 @@ class _ShootPageState extends State<ShootPage>
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(4),
-                            child: CustomPaint(
-                              painter: PosePainter(
-                                pose: _poses[index],
-                                style: style,
-                                fillRatio: 0.9,
-                                showKeyPoints: false,
-                                showFill: false,
-                              ),
+                            child: _PoseLayer(
+                              pose: _poses[index],
+                              style: style,
+                              fillRatio: 0.9,
+                              showKeyPoints: false,
+                              showFill: false,
+                              userScale: 1.0,
+                              userOffset: Offset.zero,
                             ),
                           ),
                         ),
@@ -470,7 +518,7 @@ class _ShootPageState extends State<ShootPage>
                 size: 64, color: Colors.white38),
             const SizedBox(height: 16),
             Text(
-              _cameraError ?? '摄像头不可用',
+              _cameraError ?? S.of(context).cameraUnavailable,
               textAlign: TextAlign.center,
               style: const TextStyle(color: Colors.white70),
             ),
@@ -478,27 +526,94 @@ class _ShootPageState extends State<ShootPage>
             FilledButton.icon(
               onPressed: _initCamera,
               icon: const Icon(Icons.refresh_rounded),
-              label: const Text('重试'),
+              label: Text(S.of(context).retry),
             ),
-            if (_cameraError != null &&
-                _cameraError!.contains('永久拒绝'))
-              Padding(
-                padding: const EdgeInsets.only(top: 12),
-                child: FilledButton.icon(
-                  onPressed: () => openAppSettings(),
-                  icon: const Icon(Icons.settings_rounded),
-                  label: const Text('去系统设置开启'),
-                ),
-              ),
             const SizedBox(height: 12),
             TextButton(
               onPressed: () => Navigator.of(context).maybePop(),
-              child:
-                  const Text('返回', style: TextStyle(color: Colors.white54)),
+              child: Text(S.of(context).back,
+                  style: const TextStyle(color: Colors.white54)),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+/// 把姿势画到预览上：若姿势带 imageAsset，则异步加载透明 PNG 并交给
+/// [PosePainter] 以图片方式渲染；否则直接走 SVG path 渲染。
+class _PoseLayer extends StatelessWidget {
+  const _PoseLayer({
+    required this.pose,
+    required this.style,
+    this.fillRatio = 0.5,
+    this.showKeyPoints = true,
+    this.showFill = true,
+    this.userScale = 1.0,
+    this.userOffset = Offset.zero,
+  });
+
+  final Pose pose;
+  final PoseStyle style;
+  final double fillRatio;
+  final bool showKeyPoints;
+  final bool showFill;
+  final double userScale;
+  final Offset userOffset;
+
+  /// 按 asset 路径缓存解码后的 ui.Image，避免每次重建都重新解码。
+  static final Map<String, Future<ui.Image?>> _imageCache = {};
+
+  Future<ui.Image?> _loadImage(String asset) {
+    return _imageCache.putIfAbsent(asset, () async {
+      try {
+        final data = await rootBundle.load(asset);
+        final codec =
+            await ui.instantiateImageCodec(data.buffer.asUint8List());
+        final frame = await codec.getNextFrame();
+        return frame.image;
+      } catch (e) {
+        print('[PoseLayer] 加载姿势图失败 $asset: $e');
+        return null;
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // 关键修复：CustomPaint 在无 child、无显式 size 时默认 Size.zero，
+    // 放在 Stack/宽松约束下会被约束成 0 尺寸，导致 paint() 拿到 size=(0,0)、
+    // 缩放比 0、整张姿势看不见（且不报错、不黑屏）。用 SizedBox.expand 撑满。
+    final noImagePainter = PosePainter(
+      pose: pose,
+      style: style,
+      fillRatio: fillRatio,
+      showKeyPoints: showKeyPoints,
+      showFill: showFill,
+      userScale: userScale,
+      userOffset: userOffset,
+    );
+    return SizedBox.expand(
+      child: pose.imageAsset == null
+          ? CustomPaint(painter: noImagePainter)
+          : FutureBuilder<ui.Image?>(
+              future: _loadImage(pose.imageAsset!),
+              builder: (context, snap) {
+                return CustomPaint(
+                  painter: PosePainter(
+                    pose: pose,
+                    style: style,
+                    fillRatio: fillRatio,
+                    showKeyPoints: showKeyPoints,
+                    showFill: showFill,
+                    overlayImage: snap.data,
+                    userScale: userScale,
+                    userOffset: userOffset,
+                  ),
+                );
+              },
+            ),
     );
   }
 }
