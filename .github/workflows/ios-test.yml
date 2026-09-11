@@ -50,33 +50,47 @@ jobs:
   build-signed:
     name: Build iOS (signed / TestFlight-ready)
     runs-on: macos-14
-    if: ${{ secrets.IOS_DIST_CERT_P12 != '' && secrets.IOS_DIST_CERT_PASSWORD != '' && secrets.IOS_PROVISIONING_PROFILE != '' }}
     steps:
+      - name: Check secrets
+        id: check
+        run: |
+          if [ -n "${{ secrets.IOS_DIST_CERT_P12 }}" ] && [ -n "${{ secrets.IOS_DIST_CERT_PASSWORD }}" ] && [ -n "${{ secrets.IOS_PROVISIONING_PROFILE }}" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Checkout
+        if: steps.check.outputs.ready == 'true'
         uses: actions/checkout@v4
 
       - name: Set up Flutter
+        if: steps.check.outputs.ready == 'true'
         uses: subosito/flutter-action@v2
         with:
           channel: stable
           cache: true
 
       - name: Install dependencies
+        if: steps.check.outputs.ready == 'true'
         run: flutter pub get
 
       - name: Import distribution certificate
+        if: steps.check.outputs.ready == 'true'
         uses: apple-actions/import-codesign-certs@v3
         with:
           p12-file-base64: ${{ secrets.IOS_DIST_CERT_P12 }}
           p12-password: ${{ secrets.IOS_DIST_CERT_PASSWORD }}
 
       - name: Install provisioning profile
+        if: steps.check.outputs.ready == 'true'
         run: |
           echo "${{ secrets.IOS_PROVISIONING_PROFILE }}" | base64 --decode > Runner.mobileprovision
           mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
           cp Runner.mobileprovision "$HOME/Library/MobileDevice/Provisioning Profiles/Runner.mobileprovision"
 
       - name: Write export options
+        if: steps.check.outputs.ready == 'true'
         run: |
           cat > exportOptions.plist <<'PLIST'
           <?xml version="1.0" encoding="UTF-8"?>
@@ -94,9 +108,11 @@ jobs:
           PLIST
 
       - name: Build signed iOS archive
+        if: steps.check.outputs.ready == 'true'
         run: flutter build ipa --release --export-options-plist=exportOptions.plist
 
       - name: Upload signed ipa
+        if: steps.check.outputs.ready == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: ios-app-signed
