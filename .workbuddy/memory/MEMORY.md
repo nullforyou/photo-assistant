@@ -26,3 +26,24 @@
 - **生成器跑法（重要）**：必须在含 `opencc-python-reimplemented` 的隔离 venv 下运行才会真正转繁体——`C:/Users/81215/.workbuddy/binaries/python/envs/default/Scripts/python.exe scripts/generate_poses_json.py`。用系统 python 跑会打印警告且 zh_Hant 回退为简体。跑完同步 WSL / `_generated_poses.json` / `pose_data.dart` 三处。
 - **WSL poses.json**：含 5 风格（minimal/dual_outline/neon/soft_glow/none），`activeStyle:'none'`（无光影=默认双层、tint:null）。`none` 曾整块丢失，已由 `scripts/generate_poses_json.py` 兜底补回（重跑即修复三处：WSL/_generated_poses.json/pose_data.dart）。
 - 改本地化或离线数据后必须 `flutter run` 重装验收（热重载不生效）。
+
+## 资源处理：素描图→透明 PNG（抠白底，非 AI 抠图）
+- 源图 `image/NNN_姿势名.png`（1728×2304 RGB 白底线稿）→ 产物 `assets/poses/pose_NNN.png`（900×1200 RGBA，约 98% 透明）+ `pose_NNN_preview.png`（叠深色底便于肉眼查）。
+- 技术=**亮度阈值抠图**：`min(R,G,B)>=243` 的像素置 α=0（兼容纯白底 255 与浅灰底如 005≈248，保留抗锯齿灰边防断线）；右下角"豆包AI"水印用 scipy 连通域定位、只删落在该区域且为灰字(平均亮度 208~252、非深色线条)的小连通域。降采样时**颜色与掩码分开 LANCZOS 再合成**，避免 RGBA 直接缩放产生椒盐噪点。
+- 两个脚本：`scripts/make_one_pose.py`（单张/保守版，**最终用**——只去白底+右下角水印，保留所有灰线稿，是修"线条断断续续"后的版本）与 `scripts/make_poses_transparent.py`（批量/激进版——还去浅色字幕框、四角水印、浅色背景噪点，易误删浅灰线导致断线，是前者的反面教材）。
+- 复刻依赖：Python + Pillow + numpy + scipy（venv `C:/Users/81215/.workbuddy/binaries/python/envs/default` 已装）。单张：`python scripts/make_one_pose.py <源图> [输出目录]`；批量：直接跑 `make_poses_transparent.py`（路径写死在项目内）。调参：背景阈值 243、水印区比例 `WM_X0_RATIO/WM_Y0_RATIO`、输出宽 `MAKE_ONE_MAXW`（默认 900）。
+- **适用性边界**：仅对"白底/浅底线稿"有效（亮暗双峰分布）；**照片/实景人像不适用**，需用 rembg(U2Net) 或 Photoshop。彩底、极浅灰线、投影需另调阈值或加 pale-colored 检测（见批量脚本）。
+
+## App 图标（全平台）
+- 当前图标：2026-09-11 二次更换为粉底人物设计稿（726×732，圆角≈139，底色深粉 **#FDADAD**，人物描边 **#EE8888 系**），已安装到 android/ios/web/macos/windows 全部 41 个文件；旧图标的备份在 `icon/_original_backup/`（仅首次安装时生成，不会被覆盖）。
+- **换图标只需一条命令**（脚本已泛化，自动补边成正方形、自动抠主体、自动检测自适应底色）：
+  `C:/Users/81215/.workbuddy/binaries/python/envs/default/Scripts/python.exe scripts/make_app_icons.py --src "<设计稿.png>" --out "D:/work/photo-assistant/icon" --project "D:/work/photo-assistant" --install`
+- 验收看两张图：`icon/preview.png`（母版 + 各尺寸辨识度）、`icon/android/adaptive_preview.png`（圆形遮罩下内容没被裁掉）。
+- 踩坑细节（外沿假色环、描边同色系必须用连通性判背景）见 `2026-09-11.md`，并已沉淀进用户级技能 `app-icon-kit` v1.1.0。
+
+## 品牌配色与首页（UI 规范）
+- **品牌色常量定义在 `lib/main.dart` 顶部，全 App 复用**：`kBrandPink #FDADAD`（图标底色）、`kBrandPinkDeep #EE8188`（描边/主强调色）、`kCream #FDF6F2`（奶油白背景）、`kInkPlum #6B3A42`（暖调深字）、`kMutedPlum #B07A82`（次要字色）。改配色只改这几处。
+- **`ThemeData.seedColor` 已从 `Colors.teal` 改为 `kBrandPinkDeep`**（2026-09-11）——**不要再改回 teal**，否则整 App 冷色强调与图标粉调再次冲突。
+- 首页 `WelcomePage`（`lib/main.dart`）= 图标主视觉 + 虚线圆环 + 星芒 + 胶囊按钮，复刻图标视觉语言。**圆环必须与图标同 `Stack(alignment: center)` 居中，不能按屏幕居中**（会套偏）。详见 `2026-09-11.md`。
+- 首屏用到 `assets/branding/app_icon_round.png`（圆角透明版），`pubspec.yaml` 已注册 `assets/branding/`。换图标后如要同步首屏，需重新拷贝该文件。
+

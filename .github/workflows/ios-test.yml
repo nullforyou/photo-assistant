@@ -1,0 +1,104 @@
+name: iOS Test Build
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - v*
+    branches:
+      - main
+
+concurrency:
+  group: ios-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-unsigned:
+    name: Build iOS (unsigned)
+    runs-on: macos-14
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze
+        run: flutter analyze
+
+      - name: Run tests
+        run: flutter test
+
+      - name: Build unsigned iOS archive
+        run: flutter build ipa --release --no-codesign
+
+      - name: Upload app bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-app-unsigned
+          path: |
+            build/ios/ipa/*.ipa
+            build/ios/archive/Runner.xcarchive
+          if-no-files-found: error
+
+  build-signed:
+    name: Build iOS (signed / TestFlight-ready)
+    runs-on: macos-14
+    if: ${{ secrets.IOS_DIST_CERT_P12 != '' && secrets.IOS_DIST_CERT_PASSWORD != '' && secrets.IOS_PROVISIONING_PROFILE != '' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Import distribution certificate
+        uses: apple-actions/import-codesign-certs@v3
+        with:
+          p12-file-base64: ${{ secrets.IOS_DIST_CERT_P12 }}
+          p12-password: ${{ secrets.IOS_DIST_CERT_PASSWORD }}
+
+      - name: Install provisioning profile
+        run: |
+          echo "${{ secrets.IOS_PROVISIONING_PROFILE }}" | base64 --decode > Runner.mobileprovision
+          mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
+          cp Runner.mobileprovision "$HOME/Library/MobileDevice/Provisioning Profiles/Runner.mobileprovision"
+
+      - name: Write export options
+        run: |
+          cat > exportOptions.plist <<'PLIST'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>method</key>
+              <string>app-store-connect</string>
+              <key>stripSwiftSymbols</key>
+              <true/>
+              <key>compileBitcode</key>
+              <false/>
+          </dict>
+          </plist>
+          PLIST
+
+      - name: Build signed iOS archive
+        run: flutter build ipa --release --export-options-plist=exportOptions.plist
+
+      - name: Upload signed ipa
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-app-signed
+          path: build/ios/ipa/*.ipa
+          if-no-files-found: error
