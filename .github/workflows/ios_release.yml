@@ -59,35 +59,13 @@ jobs:
           security unlock-keychain -p "" build.keychain
           security set-key-partition-list -S apple-tool:,apple: -s -k "" build.keychain
 
-      - name: 注入 Bundle ID
+      - name: 注入 Team / Bundle ID 并校验签名配置
         run: |
-          sed -i '' "s/com.chunyanyang.photoassistant/${{ secrets.BUNDLE_ID }}/g" ios/Runner.xcodeproj/project.pbxproj
+          sed -i '' "s/__TEAM_ID__/${{ secrets.APPLE_TEAM_ID }}/g" ios/Runner.xcodeproj/project.pbxproj
           sed -i '' "s/YOUR_TEAM_ID/${{ secrets.APPLE_TEAM_ID }}/g" ios/ExportOptions.plist
           sed -i '' "s/com.chunyanyang.photoassistant/${{ secrets.BUNDLE_ID }}/g" ios/ExportOptions.plist
-
-      - name: 强制手动签名（覆盖工程默认 Automatic / iPhone Developer）
-        env:
-          TEAM: ${{ secrets.APPLE_TEAM_ID }}
-        run: |
-          python3 - <<'PY'
-          import os
-          path = "ios/Runner.xcodeproj/project.pbxproj"
-          with open(path) as f:
-              s = f.read()
-          team = os.environ["TEAM"]
-          # 工程默认 Automatic + iPhone Developer；CI 只装了 Distribution 证书，
-          # 归档阶段会报 "No development certificates available"。改为手动 + Apple Distribution。
-          s = s.replace('CODE_SIGN_STYLE = Automatic;', 'CODE_SIGN_STYLE = Manual;')
-          s = s.replace('"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";',
-                        '"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";')
-          inject = ('CODE_SIGN_STYLE = Manual;\n'
-                    '\t\t\t\tDEVELOPMENT_TEAM = %s;\n'
-                    '\t\t\t\tPROVISIONING_PROFILE_SPECIFIER = photoassistant-appstore;' % team)
-          s = s.replace('CODE_SIGN_STYLE = Manual;', inject)
-          with open(path, 'w') as f:
-              f.write(s)
-          print("patched signing -> Manual / Apple Distribution / team", team)
-          PY
+          echo "--- pbxproj 签名设置(归档将使用) ---"
+          grep -nE "CODE_SIGN_STYLE|CODE_SIGN_IDENTITY|DEVELOPMENT_TEAM|PROVISIONING_PROFILE_SPECIFIER" ios/Runner.xcodeproj/project.pbxproj | head -20
 
       - name: 构建 IPA
         run: |
