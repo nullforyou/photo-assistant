@@ -33,11 +33,12 @@ jobs:
   build-upload:
     runs-on: macos-latest
     env:
-      # 供 Fastlane 步骤读取（Fastlane 只能读 ENV，读不到 ${{ secrets.* }}）
+      # 供 Fastlane 步骤读取（Fastlane 只能读 ENV，读不到仓库 secret）
       APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
       APPLE_API_ISSUER_ID: ${{ secrets.APPLE_API_ISSUER_ID }}
       APPLE_API_P8: ${{ secrets.APPLE_API_P8 }}
       BUNDLE_ID: ${{ secrets.BUNDLE_ID }}
+    steps:
       - uses: actions/checkout@v4
 
       - name: 设置 Flutter
