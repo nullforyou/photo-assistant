@@ -43,6 +43,10 @@ dependencies:
   # 原生端（Android/iOS/HarmonyOS）保存图片到系统相册
   saver_gallery: ^5.1.0
 
+  # 相机预览与拍照
+  # Web 端保存图片用到官方推荐的 package:web（替代已弃用的 dart:html）
+  web: ^1.0.0
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8

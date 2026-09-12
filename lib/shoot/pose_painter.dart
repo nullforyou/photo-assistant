@@ -70,10 +70,10 @@ class PosePainter extends CustomPainter {
     final cx = size.width / 2;
     final cy = size.height / 2;
     final m = Matrix4.identity()
-      ..translate(userOffset.dx, userOffset.dy)
-      ..translate(cx, cy)
-      ..scale(userScale, userScale)
-      ..translate(-cx, -cy);
+      ..translateByDouble(userOffset.dx, userOffset.dy, 0.0, 1.0)
+      ..translateByDouble(cx, cy, 0.0, 1.0)
+      ..scaleByDouble(userScale, userScale, 1.0, 1.0)
+      ..translateByDouble(-cx, -cy, 0.0, 1.0);
     m.multiply(base);
     return m;
   }
@@ -164,7 +164,7 @@ class PosePainter extends CustomPainter {
         _paintLegacy(canvas, size);
       }
     } catch (e) {
-      print('[PosePainter] 绘制姿势失败（已跳过）：$e');
+      debugPrint('[PosePainter] 绘制姿势失败（已跳过）：$e');
     }
   }
 

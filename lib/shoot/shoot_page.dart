@@ -194,10 +194,10 @@ class _ShootPageState extends State<ShootPage>
     final cx = size.width / 2;
     final cy = size.height / 2;
     final m = Matrix4.identity()
-      ..translate(_poseOffset.dx, _poseOffset.dy)
-      ..translate(cx, cy)
-      ..scale(_poseScale, _poseScale)
-      ..translate(-cx, -cy);
+      ..translateByDouble(_poseOffset.dx, _poseOffset.dy, 0.0, 1.0)
+      ..translateByDouble(cx, cy, 0.0, 1.0)
+      ..scaleByDouble(_poseScale, _poseScale, 1.0, 1.0)
+      ..translateByDouble(-cx, -cy, 0.0, 1.0);
     m.multiply(base);
     return m;
   }
@@ -574,7 +574,7 @@ class _PoseLayer extends StatelessWidget {
         final frame = await codec.getNextFrame();
         return frame.image;
       } catch (e) {
-        print('[PoseLayer] 加载姿势图失败 $asset: $e');
+        debugPrint('[PoseLayer] 加载姿势图失败 $asset: $e');
         return null;
       }
     });
