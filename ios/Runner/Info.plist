@@ -23,6 +23,10 @@
 		<string>es</string>
 		<string>fr</string>
 		<string>de</string>
+		<string>zh-Hant</string>
+		<string>th</string>
+		<string>pt</string>
+		<string>tr</string>
 	</array>
 	<key>CFBundleName</key>
 	<string>photo_assistant</string>
@@ -76,5 +80,11 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>用于在拍照时叠加姿势轮廓进行引导，并将拍好的照片保存到相册</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>用于将拍摄完成的照片保存到你的相册</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>用于读取相册以便在保存前预览或选择照片</string>
 </dict>
 </plist>

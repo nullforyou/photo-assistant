@@ -1,0 +1,82 @@
+# 无 Mac 也能上传 App Store：GitHub Actions 用云端 macOS runner 自动构建并上传
+#
+# 前置（需你本人在 Apple 后台完成，并把值填进仓库 Settings → Secrets）：
+#   1. App ID：在 https://developer.apple.com/account 注册，Bundle ID 用下面 SECRET 里的值
+#   2. Distribution 证书：生成 Apple Distribution，导出 .p12（设密码），编码为 base64 存到 APPLE_CERT_P12
+#   3. App Store 描述文件：生成 App Store 类型 Provisioning Profile，存到 APPLE_PROV_PROFILE
+#   4. App Store Connect API Key：在 App Store Connect → 用户与访问 → 密钥，生成 .p8，记下 Key ID / Issuer ID
+#
+# Secrets 清单（仓库 Settings → Secrets and variables → Actions）：
+#   APPLE_TEAM_ID          Developer 账号的 10 位 Team ID
+#   BUNDLE_ID             com.chunyanyang.photoassistant（与后台 App ID 一致）
+#   APPLE_CERT_P12        证书 .p12 的 base64（base64 -w0 cert.p12 | pbcopy）
+#   APPLE_CERT_PASSWORD   .p12 导出密码
+#   APPLE_PROV_PROFILE    描述文件 .mobileprovision 的 base64
+#   APPLE_API_KEY_ID      .p8 的 Key ID（如 X2ABC3DEF4）
+#   APPLE_API_ISSUER_ID   App Store Connect Issuer ID
+#   APPLE_API_P8          .p8 内容的 base64
+
+name: iOS Release Upload
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: '发布版本号 (如 1.0.0)'
+        required: true
+        default: '1.0.0'
+      build:
+        description: 'Build 号 (如 1)'
+        required: true
+        default: '1'
+
+jobs:
+  build-upload:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 设置 Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.1'
+          channel: 'stable'
+
+      - name: 写入签名文件
+        run: |
+          echo "${{ secrets.APPLE_CERT_P12 }}" | base64 --decode > cert.p12
+          echo "${{ secrets.APPLE_PROV_PROFILE }}" | base64 --decode > profile.mobileprovision
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
+          echo "${{ secrets.APPLE_API_P8 }}" | base64 --decode > AuthKey_${{ secrets.APPLE_API_KEY_ID }}.p8
+          mkdir -p ~/.private_keys
+          cp AuthKey_${{ secrets.APPLE_API_KEY_ID }}.p8 ~/.private_keys/
+
+      - name: 安装证书到钥匙串
+        run: |
+          security create-keychain -p "" build.keychain
+          security import cert.p12 -k build.keychain -P "${{ secrets.APPLE_CERT_PASSWORD }}" -T /usr/bin/codesign
+          security list-keychains -d user -s build.keychain login.keychain
+          security unlock-keychain -p "" build.keychain
+          security set-key-partition-list -S apple-tool:,apple: -s -k "" build.keychain
+
+      - name: 注入 Bundle ID
+        run: |
+          sed -i '' "s/com.chunyanyang.photoassistant/${{ secrets.BUNDLE_ID }}/g" ios/Runner.xcodeproj/project.pbxproj
+          sed -i '' "s/YOUR_TEAM_ID/${{ secrets.APPLE_TEAM_ID }}/g" ios/ExportOptions.plist
+          sed -i '' "s/com.chunyanyang.photoassistant/${{ secrets.BUNDLE_ID }}/g" ios/ExportOptions.plist
+
+      - name: 构建 IPA
+        run: |
+          flutter pub get
+          flutter build ipa --release \
+            --export-options-plist=ios/ExportOptions.plist \
+            --build-name=${{ github.event.inputs.version }} \
+            --build-number=${{ github.event.inputs.build }}
+
+      - name: 上传到 App Store Connect
+        run: |
+          IPA=$(find build/ios/ipa -name "*.ipa" | head -1)
+          xcrun altool --upload-app -f "$IPA" \
+            --apiKey ${{ secrets.APPLE_API_KEY_ID }} \
+            --apiIssuer ${{ secrets.APPLE_API_ISSUER_ID }} \
+            --type ios

@@ -46,4 +46,11 @@
 - **`ThemeData.seedColor` 已从 `Colors.teal` 改为 `kBrandPinkDeep`**（2026-09-11）——**不要再改回 teal**，否则整 App 冷色强调与图标粉调再次冲突。
 - 首页 `WelcomePage`（`lib/main.dart`）= 图标主视觉 + 虚线圆环 + 星芒 + 胶囊按钮，复刻图标视觉语言。**圆环必须与图标同 `Stack(alignment: center)` 居中，不能按屏幕居中**（会套偏）。详见 `2026-09-11.md`。
 - 首屏用到 `assets/branding/app_icon_round.png`（圆角透明版），`pubspec.yaml` 已注册 `assets/branding/`。换图标后如要同步首屏，需重新拷贝该文件。
+- ⚠️ **品牌化的漏网之鱼（未修）**：`lib/shoot/photo_preview_page.dart:53` 保存按钮仍是 `Colors.teal`；`lib/shoot/shoot_page.dart:454` 缩略图选中边框 `Colors.tealAccent`、`:498` 加载指示器 `Colors.teal`。要统一粉调需抽 `lib/theme/brand.dart` 再引用。
+
+## iOS 上架（App Store）
+- 用户已激活付费 Developer Program（$99/年），但**没有 Mac**。上传两条路：借/租 Mac 走 Xcode 标准流程；或走 `/.github/workflows/ios_release.yml`（GitHub Actions 云端 macos runner，需填 7 个 secret）。
+- **Windows 侧已全部就绪**：`ios/Runner/Info.plist` 三个权限串 + 11 语言；`ios/Podfile`（手写标准模板，platform iOS 15.0）；`ios/ExportOptions.plist`（teamId 占位 YOUR_TEAM_ID / Bundle ID 已改为 `com.chunyanyang.photoassistant`）；`privacy_policy.html`；`store_listing.md`；`Bundle ID` 已从 `com.example.photoAssistant` 改为 **`com.chunyanyang.photoassistant`**（pbxproj 主 3 处 + 测试 3 处、macOS 4 处、ExportOptions、store_listing 均同步）。
+- **仍需用户本人（Apple 后台 + 填 CI secret）**：Distribution 证书(.p12)/App Store 描述文件/App Store Connect API Key(.p8)；App Store Connect 建 App 记录 + 填隐私政策 URL；在 GitHub 仓库 Settings 填 7 个 secret（APPLE_TEAM_ID / BUNDLE_ID=com.chunyanyang.photoassistant / APPLE_CERT_P12 / APPLE_CERT_PASSWORD / APPLE_PROV_PROFILE / APPLE_API_KEY_ID / APPLE_API_ISSUER_ID / APPLE_API_P8）后点 Actions Run。
+- **商店截图**：`scripts/make_appstore_screenshots.py` 生成 6.7"(1290×2796) + 6.5"(1242×2688) 各 4 张到 `store_screenshots/`。5.5" 不必单独做（后台可复用 6.7"）。详见 `2026-09-12.md`。
 
