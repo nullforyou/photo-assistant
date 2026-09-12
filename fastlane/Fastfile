@@ -7,12 +7,14 @@ platform :ios do
       key_id: ENV["APPLE_API_KEY_ID"],
       issuer_id: ENV["APPLE_API_ISSUER_ID"],
       key_filepath: ENV["APPLE_API_P8_PATH"],
+      team_id: ENV["APPLE_TEAM_ID"],
       duration: 1200,
       in_house: false
     )
 
     deliver(
       api_key: api_key,
+      team_id: ENV["APPLE_TEAM_ID"],
       app_identifier: ENV["BUNDLE_ID"],
       ipa: ENV["IPA_PATH"],
       skip_screenshots: true,
