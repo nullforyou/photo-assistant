@@ -47,11 +47,16 @@ end
 # binary found on PATH) for packages/flutter_tools/bin/podhelper.
 def find_podhelper
   relative = File.join('packages', 'flutter_tools', 'bin', 'podhelper')
+  # Case A: FLUTTER_ROOT 指向 SDK 根目录 -> podhelper 是其直接子目录。
+  #   (CI 上 subosito/flutter-action 把 FLUTTER_ROOT 设为 .../flutter，此时 podhelper 在下方)
+  direct = File.join(flutter_root, relative)
+  return direct if File.exist?(direct)
+  # Case B: FLUTTER_ROOT 指向更深的目录 (如 <sdk>/bin/cache) -> 向上搜索。
   found = walk_up_for_file(flutter_root, relative)
   if found.nil?
     flutter_bin = `which flutter`.strip
     unless flutter_bin.empty?
-      # bin/flutter -> SDK root is two levels up.
+      # bin/flutter -> SDK根目录在其上两级。
       found = walk_up_for_file(File.expand_path(File.join('..', '..'), File.dirname(flutter_bin)), relative)
     end
   end

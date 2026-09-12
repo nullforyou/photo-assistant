@@ -75,10 +75,12 @@ jobs:
             --build-name=${{ github.event.inputs.version }} \
             --build-number=${{ github.event.inputs.build }}
 
+      - name: 安装 Fastlane
+        run: gem install fastlane
+
       - name: 上传到 App Store Connect
         run: |
           IPA=$(find build/ios/ipa -name "*.ipa" | head -1)
-          xcrun altool --upload-app -f "$IPA" \
-            --apiKey ${{ secrets.APPLE_API_KEY_ID }} \
-            --apiIssuer ${{ secrets.APPLE_API_ISSUER_ID }} \
-            --type ios
+          echo "准备上传: $IPA"
+          export IPA_PATH="$IPA"
+          fastlane ios upload
