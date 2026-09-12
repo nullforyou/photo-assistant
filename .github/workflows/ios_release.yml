@@ -54,7 +54,7 @@ jobs:
       - name: 安装证书到钥匙串
         run: |
           security create-keychain -p "" build.keychain
-          security import cert.p12 -k build.keychain -P "${{ secrets.APPLE_CERT_PASSWORD }}" -T /usr/bin/codesign
+          security import cert.p12 -k build.keychain -P "${{ secrets.APPLE_CERT_PASSWORD }}" -T /usr/bin/codesign -T /usr/bin/xcrun -T /usr/bin/security
           security list-keychains -d user -s build.keychain login.keychain
           security unlock-keychain -p "" build.keychain
           security set-key-partition-list -S apple-tool:,apple: -s -k "" build.keychain
@@ -64,6 +64,30 @@ jobs:
           sed -i '' "s/com.chunyanyang.photoassistant/${{ secrets.BUNDLE_ID }}/g" ios/Runner.xcodeproj/project.pbxproj
           sed -i '' "s/YOUR_TEAM_ID/${{ secrets.APPLE_TEAM_ID }}/g" ios/ExportOptions.plist
           sed -i '' "s/com.chunyanyang.photoassistant/${{ secrets.BUNDLE_ID }}/g" ios/ExportOptions.plist
+
+      - name: 强制手动签名（覆盖工程默认 Automatic / iPhone Developer）
+        env:
+          TEAM: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          python3 - <<'PY'
+          import os
+          path = "ios/Runner.xcodeproj/project.pbxproj"
+          with open(path) as f:
+              s = f.read()
+          team = os.environ["TEAM"]
+          # 工程默认 Automatic + iPhone Developer；CI 只装了 Distribution 证书，
+          # 归档阶段会报 "No development certificates available"。改为手动 + Apple Distribution。
+          s = s.replace('CODE_SIGN_STYLE = Automatic;', 'CODE_SIGN_STYLE = Manual;')
+          s = s.replace('"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";',
+                        '"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";')
+          inject = ('CODE_SIGN_STYLE = Manual;\n'
+                    '\t\t\t\tDEVELOPMENT_TEAM = %s;\n'
+                    '\t\t\t\tPROVISIONING_PROFILE_SPECIFIER = photoassistant-appstore;' % team)
+          s = s.replace('CODE_SIGN_STYLE = Manual;', inject)
+          with open(path, 'w') as f:
+              f.write(s)
+          print("patched signing -> Manual / Apple Distribution / team", team)
+          PY
 
       - name: 构建 IPA
         run: |
