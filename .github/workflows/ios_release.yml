@@ -70,6 +70,10 @@ jobs:
       - name: 构建 IPA
         run: |
           flutter pub get
+          # Flutter 3.47 已全面改用 Swift Package Manager（全部插件均为 SPM）。
+          # 遗留 ios/Podfile 会触发 CocoaPods 沙箱校验并报
+          # "The sandbox is not in sync with the Podfile.lock"。纯 SPM 构建，移除 CocoaPods 残留。
+          rm -rf ios/Pods ios/Podfile.lock
           flutter build ipa --release \
             --export-options-plist=ios/ExportOptions.plist \
             --build-name=${{ github.event.inputs.version }} \
