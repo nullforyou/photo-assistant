@@ -1,7 +1,7 @@
 # Uncomment this line to define a global platform for your project
 platform :ios, '15.0'
 
-# CocoaPods analytics sends network stats synchronously affecting flutter build latency.
+# CocoaPods analytics sends network stats synchronously affecting flutter build latency
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
 project 'Runner', {
@@ -10,20 +10,57 @@ project 'Runner', {
   'Release' => :release,
 }
 
+# Walk upward from a starting directory looking for `relative`; returns the first
+# absolute path that exists, or nil when the filesystem root is reached.
+def walk_up_for_file(start_dir, relative)
+  dir = File.expand_path(start_dir)
+  loop do
+    candidate = File.join(dir, relative)
+    return candidate if File.exist?(candidate)
+    parent = File.expand_path('..', dir)
+    break if parent == dir
+    dir = parent
+  end
+  nil
+end
+
 def flutter_root
-  generated_xcode_build_settings_path = File.expand_path(File.join('..', 'Flutter', 'Generated.xcconfig'), __FILE__)
-  unless File.exist?(generated_xcode_build_settings_path)
-    raise "#{generated_xcode_build_settings_path} must exist. If you're running pod install manually, make sure flutter pub get is executed first"
+  # Flutter 3.x writes FLUTTER_ROOT into one of these generated xcconfig files.
+  xcconfig_candidates = [
+    File.expand_path(File.join('..', 'Flutter', 'Generated.xcconfig'), __FILE__),
+    File.expand_path(File.join('..', 'Flutter', 'ephemeral', 'Generated.xcconfig'), __FILE__),
+  ]
+  xcconfig = xcconfig_candidates.find { |p| File.exist?(p) }
+  unless xcconfig
+    raise "#{xcconfig_candidates.first} must exist. If you're running pod install manually, make sure flutter pub get is executed first."
   end
 
-  File.foreach(generated_xcode_build_settings_path) do |line|
+  File.foreach(xcconfig) do |line|
     matches = line.match(/FLUTTER_ROOT\=(.*)/)
     return matches[1].strip if matches
   end
-  raise "FLUTTER_ROOT not found in #{generated_xcode_build_settings_path}. Try deleting Generated.xcconfig, then run flutter pub get"
+  raise "FLUTTER_ROOT not found in #{xcconfig}. Try deleting Generated.xcconfig, then run flutter pub get"
 end
 
-require File.expand_path(File.join('..', '..', 'packages', 'flutter_tools', 'bin', 'podhelper'), flutter_root)
+# Locate flutter_tools' podhelper robustly. On some CI setups FLUTTER_ROOT points at
+# <sdk>/bin/cache, so we search upward from it (and, as a fallback, from the `flutter`
+# binary found on PATH) for packages/flutter_tools/bin/podhelper.
+def find_podhelper
+  relative = File.join('packages', 'flutter_tools', 'bin', 'podhelper')
+  found = walk_up_for_file(flutter_root, relative)
+  if found.nil?
+    flutter_bin = `which flutter`.strip
+    unless flutter_bin.empty?
+      # bin/flutter -> SDK root is two levels up.
+      found = walk_up_for_file(File.expand_path(File.join('..', '..'), File.dirname(flutter_bin)), relative)
+    end
+  end
+  found
+end
+
+podhelper = find_podhelper
+raise "Could not locate flutter_tools podhelper (FLUTTER_ROOT=#{flutter_root}). Make sure flutter pub get has run." if podhelper.nil?
+require podhelper
 
 flutter_ios_podfile_setup
 
