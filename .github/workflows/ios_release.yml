@@ -93,17 +93,21 @@ jobs:
           name: photo_assistant-ipa
           path: build/ios/ipa/*.ipa
 
-      - name: 安装 Fastlane
-        run: gem install fastlane
+      # ===== 以下两步已注释：改为纯手动上传流程 =====
+      # 构建产出的 IPA 已作为 artifact 可在运行页下载，
+      # 后续在 Mac 上用 Transporter / Xcode Organizer 手动传 App Store Connect。
+      # 若要恢复 CI 自动上传，取消下面注释并确保 Fastfile / team_id / App 记录已就绪。
+      # - name: 安装 Fastlane
+      #   run: gem install fastlane
+      #
+      # - name: 上传到 App Store Connect（自动）
+      #   run: |
+      #     IPA=$(find build/ios/ipa -name "*.ipa" | head -1)
+      #     echo "准备上传: $IPA"
+      #     # 把 .p8 解码到固定路径，供 Fastlane 用 APPLE_API_P8_PATH 读取（避免 key_id 拼接出错）
+      #     echo "$APPLE_API_P8" | base64 --decode > AuthKey.p8
+      #     export IPA_PATH="$IPA"
+      #     export APPLE_API_P8_PATH="$(pwd)/AuthKey.p8"
+      #     echo "APPLE_API_KEY_ID=$APPLE_API_KEY_ID  BUNDLE_ID=$BUNDLE_ID"
+      #     fastlane ios upload
 
-      - name: 上传到 App Store Connect（自动，失败不阻断手动流程）
-        continue-on-error: true
-        run: |
-          IPA=$(find build/ios/ipa -name "*.ipa" | head -1)
-          echo "准备上传: $IPA"
-          # 把 .p8 解码到固定路径，供 Fastlane 用 APPLE_API_P8_PATH 读取（避免 key_id 拼接出错）
-          echo "$APPLE_API_P8" | base64 --decode > AuthKey.p8
-          export IPA_PATH="$IPA"
-          export APPLE_API_P8_PATH="$(pwd)/AuthKey.p8"
-          echo "APPLE_API_KEY_ID=$APPLE_API_KEY_ID  BUNDLE_ID=$BUNDLE_ID"
-          fastlane ios upload
