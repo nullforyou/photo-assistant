@@ -1,0 +1,8 @@
+Photo Assistant vous aide à trouver la pose et à capturer de belles photos en toute simplicité.
+
+• Plusieurs modèles de pose intégrés. Lors de la prise de vue, une silhouette semi•transparente se superpose au viseur pour ajuster votre pose en temps réel
+• Prend en charge 11 langues d'interface (chinois simplifié/traditionnel, anglais, japonais, coréen, français, allemand, thaï, portugais, espagnol, turc)
+• Enregistrement dans votre photothèque en un toucher ; tout fonctionne sur l'appareil — aucun envoi, aucune collecte de données
+• Interface rose et épurée, fidèle à ce que vous voyez
+
+Que vous vouliez des selfies plus naturels ou simplement de meilleures photos au quotidien, Photo Assistant rend la pose évidente.

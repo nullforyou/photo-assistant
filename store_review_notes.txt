@@ -1,0 +1,30 @@
+========== App Review Information → Notes（英文版，直接粘） ==========
+
+This app does not require sign-in. All features run fully offline on the device; there are no accounts, no network requests, and no data collection.
+
+How to test:
+1. Open the app, then tap the shutter button on the Home screen to open the camera.
+2. Allow Camera and Photo Library access when the system prompts appear.
+3. Pick any pose template. A translucent outline of the pose is overlaid on the live camera preview as a real-time posing guide.
+4. Tap the shutter button to capture, then tap Save. The photo is written to the system Photo Library.
+
+Notes:
+- Camera access is used only for the live preview with the pose overlay; nothing is uploaded.
+- If the pose outline does not appear, please make sure Camera permission is granted in Settings.
+- The interface supports 11 languages and follows the device language automatically.
+
+
+========== Notes（中文版，想用中文提交就粘这段） ==========
+
+本应用无需登录，也没有账号体系。所有功能均在设备本地运行，不联网、不上传、不收集任何数据。
+
+测试路径：
+1. 打开 App，在首页点快门按钮进入相机。
+2. 系统弹窗出现时，允许「相机」和「照片」权限。
+3. 任选一个姿势模板，取景画面上会叠加该姿势的半透明轮廓，作为实时摆姿参照。
+4. 点快门拍摄，再点保存，照片会写入系统相册。
+
+说明：
+- 相机仅用于显示带姿势轮廓的实时预览，画面不上传。
+- 若看不到姿势轮廓，请确认已在「设置」中授予相机权限。
+- 界面支持 11 种语言，会跟随系统语言自动切换。

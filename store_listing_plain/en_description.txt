@@ -1,0 +1,8 @@
+Photo Assistant helps you pose and capture great shots with ease.
+
+• Built in pose templates overlaid as translucent outlines on the live camera preview for real time guidance
+• 11 interface languages (Simplified/Traditional Chinese, English, Japanese, Korean, French, German, Thai, Portuguese, Spanish, Turkish)
+• One tap save to your photo library; everything runs on device — no uploads, no data collection
+• Clean, friendly pink themed UI
+
+Whether you want more natural selfies or simply better everyday photos, Photo Assistant makes posing effortless.
