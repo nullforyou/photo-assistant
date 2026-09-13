@@ -86,10 +86,18 @@ jobs:
             --build-name=${{ github.event.inputs.version }} \
             --build-number=${{ github.event.inputs.build }}
 
+      - name: 保存 IPA 产物（供手动下载）
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: photo_assistant-ipa
+          path: build/ios/ipa/*.ipa
+
       - name: 安装 Fastlane
         run: gem install fastlane
 
-      - name: 上传到 App Store Connect
+      - name: 上传到 App Store Connect（自动，失败不阻断手动流程）
+        continue-on-error: true
         run: |
           IPA=$(find build/ios/ipa -name "*.ipa" | head -1)
           echo "准备上传: $IPA"
