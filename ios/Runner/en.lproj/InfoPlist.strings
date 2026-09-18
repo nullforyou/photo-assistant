@@ -1,1 +1,4 @@
 CFBundleDisplayName = "Photo Assistant";
+NSCameraUsageDescription = "Camera access is needed to show a live preview with a pose outline guide and to take your photo.";
+NSPhotoLibraryAddUsageDescription = "Photo Library access is needed to save your captured photos.";
+NSPhotoLibraryUsageDescription = "Photo Library access is used to preview or select photos before saving.";

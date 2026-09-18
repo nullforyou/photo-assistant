@@ -1,0 +1,4 @@
+CFBundleDisplayName = "Fotoğraf Asistanı";
+NSCameraUsageDescription = "Çekim sırasında poz taslağını canlı önizlemeye bindirmek ve fotoğrafınızı kaydetmek için kullanılır.";
+NSPhotoLibraryAddUsageDescription = "Çektiğiniz fotoğrafları Fotoğraflar arşivinize kaydetmek için kullanılır.";
+NSPhotoLibraryUsageDescription = "Kaydetmeden önce fotoğrafları önizlemek veya seçmek için Fotoğraflar arşivinize erişilir.";

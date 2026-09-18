@@ -1,1 +1,4 @@
 CFBundleDisplayName = "フォトアシスタント";
+NSCameraUsageDescription = "撮影時に姿勢の輪郭を重ねてガイドするため、および撮影した写真を保存するために使用します。";
+NSPhotoLibraryAddUsageDescription = "撮影した写真を写真ライブラリに保存するために使用します。";
+NSPhotoLibraryUsageDescription = "保存前に写真をプレビュー・選択するために写真ライブラリにアクセスします。";

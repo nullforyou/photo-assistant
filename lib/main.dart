@@ -28,10 +28,13 @@ class MyApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
+      // ⚠️ 顺序有意义：设备语言不在下面清单内时，Flutter 会回退到列表**第一项**。
+      // en 放首位 → 兜底英文，与 ios/Runner/Info.plist 里权限文案的英文兜底一致
+      // （曾被 App Review 判「权限请求与应用本地化语言不一致」，勿随意把 zh 挪回第一位）。
       supportedLocales: const [
+        Locale('en'),
         Locale('zh'),
         Locale('zh', 'Hant'),
-        Locale('en'),
         Locale('ja'),
         Locale('ko'),
         Locale('fr'),

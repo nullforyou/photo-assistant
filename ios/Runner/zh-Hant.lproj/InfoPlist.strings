@@ -1,0 +1,4 @@
+CFBundleDisplayName = "拍照助手";
+NSCameraUsageDescription = "用於拍照時疊加姿勢輪廓進行引導，並將拍好的照片儲存到相簿";
+NSPhotoLibraryAddUsageDescription = "用於將拍攝完成的照片儲存到你的相簿";
+NSPhotoLibraryUsageDescription = "用於讀取相簿以便在儲存前預覽或選擇照片";

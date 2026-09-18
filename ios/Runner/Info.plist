@@ -83,10 +83,10 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>NSCameraUsageDescription</key>
-	<string>用于在拍照时叠加姿势轮廓进行引导，并将拍好的照片保存到相册</string>
+	<string>Camera access is needed to show a live preview with a pose outline guide and to take your photo.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>用于将拍摄完成的照片保存到你的相册</string>
+	<string>Photo Library access is needed to save your captured photos.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>用于读取相册以便在保存前预览或选择照片</string>
+	<string>Photo Library access is used to preview or select photos before saving.</string>
 </dict>
 </plist>

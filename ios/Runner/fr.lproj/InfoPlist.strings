@@ -1,1 +1,4 @@
 CFBundleDisplayName = "Assistant Photo";
+NSCameraUsageDescription = "Utilisé pour superposer le contour de la pose pendant la prise de vue et enregistrer votre photo.";
+NSPhotoLibraryAddUsageDescription = "Utilisé pour enregistrer vos photos dans votre photothèque.";
+NSPhotoLibraryUsageDescription = "Utilisé pour accéder à votre photothèque afin de prévisualiser ou sélectionner des photos avant l'enregistrement.";

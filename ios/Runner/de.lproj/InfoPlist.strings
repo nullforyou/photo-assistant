@@ -1,1 +1,4 @@
 CFBundleDisplayName = "Foto-Assistent";
+NSCameraUsageDescription = "Wird verwendet, um beim Fotografieren eine Posenkontur als Orientierung einzublenden und Ihr Foto zu speichern.";
+NSPhotoLibraryAddUsageDescription = "Wird verwendet, um Ihre aufgenommenen Fotos in Ihrer Fotomediathek zu sichern.";
+NSPhotoLibraryUsageDescription = "Wird verwendet, um vor dem Sichern Fotos in Ihrer Fotomediathek anzuzeigen oder auszuwählen.";

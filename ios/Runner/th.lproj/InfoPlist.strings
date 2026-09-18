@@ -1,0 +1,4 @@
+CFBundleDisplayName = "Photo Assistant";
+NSCameraUsageDescription = "ใช้เพื่อแสดงโครงร่างท่าทางซ้อนทับบนภาพตัวอย่างขณะถ่ายภาพ และบันทึกภาพที่ถ่ายไว้";
+NSPhotoLibraryAddUsageDescription = "ใช้เพื่อบันทึกภาพที่ถ่ายไว้ลงในคลังภาพของคุณ";
+NSPhotoLibraryUsageDescription = "ใช้เพื่อเข้าถึงคลังภาพสำหรับดูตัวอย่างหรือเลือกภาพก่อนบันทึก";

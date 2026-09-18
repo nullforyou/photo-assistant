@@ -1,1 +1,4 @@
 CFBundleDisplayName = "Asistente de Fotos";
+NSCameraUsageDescription = "Se usa para superponer el contorno de la pose como guía al fotografiar y guardar tu foto.";
+NSPhotoLibraryAddUsageDescription = "Se usa para guardar tus fotos en tu fototeca.";
+NSPhotoLibraryUsageDescription = "Se usa para acceder a tu fototeca y previsualizar o seleccionar fotos antes de guardarlas.";
