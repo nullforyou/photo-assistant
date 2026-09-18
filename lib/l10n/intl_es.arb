@@ -17,5 +17,9 @@
   "save": "Guardar",
   "savedToDownloads": "Guardado en Descargas (visible en el álbum)",
   "savedToAlbum": "Guardado en el álbum",
-  "saveFailed": "Error al guardar: {error}"
+  "saveFailed": "Error al guardar: {error}",
+  "photoPermissionTitle": "Se necesita acceso a Fotos",
+  "photoPermissionBody": "Guardar fotos requiere acceso a la fototeca. Permítelo en Ajustes e inténtalo de nuevo.",
+  "openSettings": "Abrir Ajustes",
+  "cancel": "Cancelar"
 }

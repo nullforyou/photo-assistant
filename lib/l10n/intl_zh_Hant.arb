@@ -17,5 +17,9 @@
   "save": "保存",
   "savedToDownloads": "已保存到下載（可在相冊中查看）",
   "savedToAlbum": "已保存到相冊",
-  "saveFailed": "保存失敗：{error}"
+  "saveFailed": "保存失敗：{error}",
+  "photoPermissionTitle": "需要相冊權限",
+  "photoPermissionBody": "儲存照片需要存取相冊。請在「設定」中允許本 App 存取相冊後重試。",
+  "openSettings": "前往設定",
+  "cancel": "取消"
 }

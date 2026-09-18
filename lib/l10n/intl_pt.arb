@@ -17,5 +17,9 @@
   "save": "Salvar",
   "savedToDownloads": "Salvo em Downloads (visível no álbum)",
   "savedToAlbum": "Salvo no álbum",
-  "saveFailed": "Falha ao salvar: {error}"
+  "saveFailed": "Falha ao salvar: {error}",
+  "photoPermissionTitle": "Acesso às fotos necessário",
+  "photoPermissionBody": "Salvar fotos exige acesso à biblioteca de fotos. Permita em Configurações.",
+  "openSettings": "Abrir Configurações",
+  "cancel": "Cancelar"
 }

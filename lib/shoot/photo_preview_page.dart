@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:photo_assistant/l10n/generated/app_localizations.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'photo_saver.dart';
 
@@ -55,9 +56,33 @@ class PhotoPreviewPage extends StatelessWidget {
                       ),
                       onPressed: () async {
                         final messenger = ScaffoldMessenger.of(context);
-                        final msg = await savePhotoToGallery(imageBytes, context);
+                        final res = await savePhotoToGallery(imageBytes, context);
                         if (!context.mounted) return;
-                        messenger.showSnackBar(SnackBar(content: Text(msg)));
+                        // 权限被永久拒绝：弹窗引导去系统设置开启（iOS 不会二次弹授权框）
+                        if (res.settingsRequired) {
+                          final goSettings = await showDialog<bool>(
+                            context: context,
+                            builder: (ctx) => AlertDialog(
+                              title: Text(s.photoPermissionTitle),
+                              content: Text(s.photoPermissionBody),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.of(ctx).pop(false),
+                                  child: Text(s.cancel),
+                                ),
+                                TextButton(
+                                  onPressed: () => Navigator.of(ctx).pop(true),
+                                  child: Text(s.openSettings),
+                                ),
+                              ],
+                            ),
+                          );
+                          if (goSettings == true) {
+                            await openAppSettings();
+                          }
+                          return;
+                        }
+                        messenger.showSnackBar(SnackBar(content: Text(res.message)));
                       },
                       icon: const Icon(Icons.check_rounded),
                       label: Text(s.save),

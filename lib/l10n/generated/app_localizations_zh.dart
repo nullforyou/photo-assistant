@@ -68,6 +68,18 @@ class SZh extends S {
   String saveFailed(String error) {
     return '保存失败：$error';
   }
+
+  @override
+  String get photoPermissionTitle => '需要相册权限';
+
+  @override
+  String get photoPermissionBody => '保存照片需要访问相册。请在「设置」中允许本 App 访问相册后重试。';
+
+  @override
+  String get openSettings => '去设置';
+
+  @override
+  String get cancel => '取消';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -133,4 +145,16 @@ class SZhHant extends SZh {
   String saveFailed(String error) {
     return '保存失敗：$error';
   }
+
+  @override
+  String get photoPermissionTitle => '需要相冊權限';
+
+  @override
+  String get photoPermissionBody => '儲存照片需要存取相冊。請在「設定」中允許本 App 存取相冊後重試。';
+
+  @override
+  String get openSettings => '前往設定';
+
+  @override
+  String get cancel => '取消';
 }

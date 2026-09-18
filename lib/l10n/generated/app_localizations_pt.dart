@@ -69,4 +69,17 @@ class SPt extends S {
   String saveFailed(String error) {
     return 'Falha ao salvar: $error';
   }
+
+  @override
+  String get photoPermissionTitle => 'Acesso às fotos necessário';
+
+  @override
+  String get photoPermissionBody =>
+      'Salvar fotos exige acesso à biblioteca de fotos. Permita em Configurações.';
+
+  @override
+  String get openSettings => 'Abrir Configurações';
+
+  @override
+  String get cancel => 'Cancelar';
 }

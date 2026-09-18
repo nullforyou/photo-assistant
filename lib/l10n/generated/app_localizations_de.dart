@@ -69,4 +69,17 @@ class SDe extends S {
   String saveFailed(String error) {
     return 'Speichern fehlgeschlagen: $error';
   }
+
+  @override
+  String get photoPermissionTitle => 'Foto-Zugriff nötig';
+
+  @override
+  String get photoPermissionBody =>
+      'Zum Speichern von Fotos ist der Zugriff auf die Fotobibliothek nötig. Bitte in Einstellungen erlauben.';
+
+  @override
+  String get openSettings => 'Einstellungen öffnen';
+
+  @override
+  String get cancel => 'Abbrechen';
 }

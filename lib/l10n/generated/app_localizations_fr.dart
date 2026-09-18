@@ -70,4 +70,17 @@ class SFr extends S {
   String saveFailed(String error) {
     return 'Échec de l\'enregistrement : $error';
   }
+
+  @override
+  String get photoPermissionTitle => 'Accès aux photos requis';
+
+  @override
+  String get photoPermissionBody =>
+      'L\'enregistrement des photos nécessite l\'accès à la photothèque. Veuillez l\'autoriser dans Réglages.';
+
+  @override
+  String get openSettings => 'Ouvrir Réglages';
+
+  @override
+  String get cancel => 'Annuler';
 }

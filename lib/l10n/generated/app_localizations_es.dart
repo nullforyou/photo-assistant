@@ -69,4 +69,17 @@ class SEs extends S {
   String saveFailed(String error) {
     return 'Error al guardar: $error';
   }
+
+  @override
+  String get photoPermissionTitle => 'Se necesita acceso a Fotos';
+
+  @override
+  String get photoPermissionBody =>
+      'Guardar fotos requiere acceso a la fototeca. Permítelo en Ajustes e inténtalo de nuevo.';
+
+  @override
+  String get openSettings => 'Abrir Ajustes';
+
+  @override
+  String get cancel => 'Cancelar';
 }

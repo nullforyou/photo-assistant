@@ -17,5 +17,9 @@
   "save": "Speichern",
   "savedToDownloads": "In Downloads gespeichert (im Album sichtbar)",
   "savedToAlbum": "In Album gespeichert",
-  "saveFailed": "Speichern fehlgeschlagen: {error}"
+  "saveFailed": "Speichern fehlgeschlagen: {error}",
+  "photoPermissionTitle": "Foto-Zugriff nötig",
+  "photoPermissionBody": "Zum Speichern von Fotos ist der Zugriff auf die Fotobibliothek nötig. Bitte in Einstellungen erlauben.",
+  "openSettings": "Einstellungen öffnen",
+  "cancel": "Abbrechen"
 }

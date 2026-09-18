@@ -68,4 +68,17 @@ class SEn extends S {
   String saveFailed(String error) {
     return 'Save failed: $error';
   }
+
+  @override
+  String get photoPermissionTitle => 'Photo access needed';
+
+  @override
+  String get photoPermissionBody =>
+      'Saving photos needs Photo Library access. Please allow it in Settings, then try again.';
+
+  @override
+  String get openSettings => 'Open Settings';
+
+  @override
+  String get cancel => 'Cancel';
 }

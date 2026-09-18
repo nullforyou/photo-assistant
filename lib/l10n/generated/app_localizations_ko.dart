@@ -68,4 +68,17 @@ class SKo extends S {
   String saveFailed(String error) {
     return '저장 실패: $error';
   }
+
+  @override
+  String get photoPermissionTitle => '사진 접근 권한 필요';
+
+  @override
+  String get photoPermissionBody =>
+      '사진을 저장하려면 사진 라이브러리 접근 권한이 필요합니다. 설정에서 허용해 주세요.';
+
+  @override
+  String get openSettings => '설정 열기';
+
+  @override
+  String get cancel => '취소';
 }

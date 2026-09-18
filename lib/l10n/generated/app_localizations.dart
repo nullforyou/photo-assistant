@@ -221,6 +221,30 @@ abstract class S {
   /// In en, this message translates to:
   /// **'Save failed: {error}'**
   String saveFailed(String error);
+
+  /// No description provided for @photoPermissionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo access needed'**
+  String get photoPermissionTitle;
+
+  /// No description provided for @photoPermissionBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Saving photos needs Photo Library access. Please allow it in Settings, then try again.'**
+  String get photoPermissionBody;
+
+  /// No description provided for @openSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings'**
+  String get openSettings;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

@@ -17,5 +17,9 @@
   "save": "Kaydet",
   "savedToDownloads": "İndirilenlere kaydedildi (albümde görülebilir)",
   "savedToAlbum": "Albüme kaydedildi",
-  "saveFailed": "Kaydetme başarısız: {error}"
+  "saveFailed": "Kaydetme başarısız: {error}",
+  "photoPermissionTitle": "Foto erişimi gerekli",
+  "photoPermissionBody": "Fotoğrafları kaydetmek için Foto Kitaplığı erişimi gerekir. Lütfen Ayarlar'dan izin verin.",
+  "openSettings": "Ayarları Aç",
+  "cancel": "İptal"
 }

@@ -17,5 +17,9 @@
   "save": "Enregistrer",
   "savedToDownloads": "Enregistré dans Téléchargements (visible dans l'album)",
   "savedToAlbum": "Enregistré dans l'album",
-  "saveFailed": "Échec de l'enregistrement : {error}"
+  "saveFailed": "Échec de l'enregistrement : {error}",
+  "photoPermissionTitle": "Accès aux photos requis",
+  "photoPermissionBody": "L'enregistrement des photos nécessite l'accès à la photothèque. Veuillez l'autoriser dans Réglages.",
+  "openSettings": "Ouvrir Réglages",
+  "cancel": "Annuler"
 }

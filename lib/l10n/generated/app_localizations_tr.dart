@@ -69,4 +69,17 @@ class STr extends S {
   String saveFailed(String error) {
     return 'Kaydetme başarısız: $error';
   }
+
+  @override
+  String get photoPermissionTitle => 'Foto erişimi gerekli';
+
+  @override
+  String get photoPermissionBody =>
+      'Fotoğrafları kaydetmek için Foto Kitaplığı erişimi gerekir. Lütfen Ayarlar\'dan izin verin.';
+
+  @override
+  String get openSettings => 'Ayarları Aç';
+
+  @override
+  String get cancel => 'İptal';
 }

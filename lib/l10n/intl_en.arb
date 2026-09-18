@@ -41,5 +41,9 @@
         "type": "String"
       }
     }
-  }
+  },
+  "photoPermissionTitle": "Photo access needed",
+  "photoPermissionBody": "Saving photos needs Photo Library access. Please allow it in Settings, then try again.",
+  "openSettings": "Open Settings",
+  "cancel": "Cancel"
 }

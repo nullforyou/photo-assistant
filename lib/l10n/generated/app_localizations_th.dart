@@ -68,4 +68,17 @@ class STh extends S {
   String saveFailed(String error) {
     return 'การบันทึกล้มเหลว: $error';
   }
+
+  @override
+  String get photoPermissionTitle => 'ต้องการสิทธิเข้าถึงรูปภาพ';
+
+  @override
+  String get photoPermissionBody =>
+      'การบันทึกรูปภาพต้องได้รับสิทธิเข้าถึงคลังรูปภาพ กรุณาอนุญาตในการตั้งค่า';
+
+  @override
+  String get openSettings => 'เปิดการตั้งค่า';
+
+  @override
+  String get cancel => 'ยกเลิก';
 }

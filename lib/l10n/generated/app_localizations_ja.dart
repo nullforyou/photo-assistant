@@ -68,4 +68,16 @@ class SJa extends S {
   String saveFailed(String error) {
     return '保存に失敗しました：$error';
   }
+
+  @override
+  String get photoPermissionTitle => '写真へのアクセスが必要';
+
+  @override
+  String get photoPermissionBody => '写真を保存するには「写真」へのアクセス許可が必要です。設定で許可してください。';
+
+  @override
+  String get openSettings => '設定を開く';
+
+  @override
+  String get cancel => 'キャンセル';
 }

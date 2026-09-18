@@ -17,5 +17,9 @@
   "save": "保存",
   "savedToDownloads": "ダウンロードに保存しました（アルバムで確認可）",
   "savedToAlbum": "アルバムに保存しました",
-  "saveFailed": "保存に失敗しました：{error}"
+  "saveFailed": "保存に失敗しました：{error}",
+  "photoPermissionTitle": "写真へのアクセスが必要",
+  "photoPermissionBody": "写真を保存するには「写真」へのアクセス許可が必要です。設定で許可してください。",
+  "openSettings": "設定を開く",
+  "cancel": "キャンセル"
 }
