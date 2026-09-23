@@ -45,6 +45,7 @@
     }
   },
   "storeUnavailable": "Le store est indisponible. Veuillez réessayer plus tard.",
+  "iapProductMissing": "Achat intégré introuvable. Dans App Store Connect, associez « pro_unlock » à cette version et soumettez-la pour révision.",
   "photoPreview": "Aperçu photo",
   "retake": "Reprendre",
   "save": "Enregistrer",

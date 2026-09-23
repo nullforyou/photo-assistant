@@ -91,7 +91,11 @@ class _PaywallSheetState extends State<_PaywallSheet> {
     final s = widget.s;
     final ps = widget.ps;
     final product = ps.product;
-    final priceText = product?.price ?? '';
+    final storeOk = ps.storeAvailable;
+    final canBuy = storeOk && product != null;
+    final String buyLabel = !storeOk
+        ? s.storeUnavailable
+        : (product == null ? s.iapProductMissing : s.buyForPrice(product.price));
 
     return Container(
       decoration: const BoxDecoration(
@@ -146,7 +150,7 @@ class _PaywallSheetState extends State<_PaywallSheet> {
                   borderRadius: BorderRadius.circular(14),
                 ),
               ),
-              onPressed: _buying ? null : _onBuy,
+              onPressed: (_buying || !canBuy) ? null : _onBuy,
               child: _buying
                   ? const SizedBox(
                       width: 20,
@@ -156,17 +160,22 @@ class _PaywallSheetState extends State<_PaywallSheet> {
                         color: Colors.white,
                       ),
                     )
-                  : Text(priceText.isEmpty
-                      ? s.unlockAllPoses
-                      : s.buyForPrice(priceText)),
+                  : Text(buyLabel),
             ),
           ),
-          if (!ps.storeAvailable) ...[
+          if (!storeOk) ...[
             const SizedBox(height: 10),
             Text(
               s.storeUnavailable,
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 12, color: Colors.red.shade300),
+            ),
+          ] else if (product == null) ...[
+            const SizedBox(height: 10),
+            Text(
+              s.iapProductMissing,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 12, color: Colors.orange.shade400),
             ),
           ],
           const SizedBox(height: 10),

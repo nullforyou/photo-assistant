@@ -45,6 +45,7 @@
     }
   },
   "storeUnavailable": "Store ist nicht verfügbar. Bitte versuchen Sie es später erneut.",
+  "iapProductMissing": "In-App-Kauf nicht gefunden. Verknüpfen Sie in App Store Connect „pro_unlock“ mit dieser Version und reichen Sie sie zur Prüfung ein.",
   "photoPreview": "Foto-Vorschau",
   "retake": "Neu aufnehmen",
   "save": "Speichern",

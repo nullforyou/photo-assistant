@@ -85,6 +85,10 @@ class SFr extends S {
       'Le store est indisponible. Veuillez réessayer plus tard.';
 
   @override
+  String get iapProductMissing =>
+      'Achat intégré introuvable. Dans App Store Connect, associez « pro_unlock » à cette version et soumettez-la pour révision.';
+
+  @override
   String get photoPreview => 'Aperçu photo';
 
   @override

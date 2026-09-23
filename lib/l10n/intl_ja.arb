@@ -45,6 +45,7 @@
     }
   },
   "storeUnavailable": "ストアは利用できません。後ほど再度お試しください。",
+  "iapProductMissing": "アプリ内購入が見つかりません。App Store Connect で pro_unlock をこのバージョンに紐づけ、審査に提出してください。",
   "photoPreview": "写真プレビュー",
   "retake": "撮り直し",
   "save": "保存",

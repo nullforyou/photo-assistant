@@ -45,6 +45,7 @@
     }
   },
   "storeUnavailable": "商店暫不可用，請稍後再試。",
+  "iapProductMissing": "未找到內購商品：請在 App Store Connect 把 pro_unlock 關聯到本版本並提交審核。",
   "photoPreview": "照片預覽",
   "retake": "重拍",
   "save": "保存",

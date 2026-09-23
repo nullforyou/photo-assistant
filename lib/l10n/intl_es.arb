@@ -45,6 +45,7 @@
     }
   },
   "storeUnavailable": "La tienda no está disponible. Inténtalo de nuevo más tarde.",
+  "iapProductMissing": "No se encontró la compra integrada. En App Store Connect, vincula «pro_unlock» a esta versión y envíala a revisión.",
   "photoPreview": "Vista previa",
   "retake": "Volver a sacar",
   "save": "Guardar",

@@ -83,6 +83,10 @@ class SKo extends S {
   String get storeUnavailable => '스토어를 사용할 수 없습니다. 나중에 다시 시도해 주세요.';
 
   @override
+  String get iapProductMissing =>
+      '인앱 결제를 찾을 수 없습니다. App Store Connect에서 pro_unlock을 이 버전에 연결하고 심사에 제출하세요.';
+
+  @override
   String get photoPreview => '사진 미리보기';
 
   @override

@@ -21,6 +21,7 @@
   "purchaseRestored": "购买已恢复",
   "purchaseFailed": "购买失败：{error}",
   "storeUnavailable": "商店暂不可用，请稍后再试。",
+  "iapProductMissing": "未找到内购商品：请在 App Store Connect 把 pro_unlock 关联到本版本并提交审核。",
   "photoPreview": "照片预览",
   "retake": "重拍",
   "save": "保存",

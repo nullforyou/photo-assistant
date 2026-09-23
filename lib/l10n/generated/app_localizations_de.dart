@@ -85,6 +85,10 @@ class SDe extends S {
       'Store ist nicht verfügbar. Bitte versuchen Sie es später erneut.';
 
   @override
+  String get iapProductMissing =>
+      'In-App-Kauf nicht gefunden. Verknüpfen Sie in App Store Connect „pro_unlock“ mit dieser Version und reichen Sie sie zur Prüfung ein.';
+
+  @override
   String get photoPreview => 'Foto-Vorschau';
 
   @override

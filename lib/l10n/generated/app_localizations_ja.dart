@@ -83,6 +83,10 @@ class SJa extends S {
   String get storeUnavailable => 'ストアは利用できません。後ほど再度お試しください。';
 
   @override
+  String get iapProductMissing =>
+      'アプリ内購入が見つかりません。App Store Connect で pro_unlock をこのバージョンに紐づけ、審査に提出してください。';
+
+  @override
   String get photoPreview => '写真プレビュー';
 
   @override

@@ -83,6 +83,10 @@ class STh extends S {
   String get storeUnavailable => 'สโตร์ไม่พร้อมใช้งาน กรุณาลองใหม่ภายหลัง';
 
   @override
+  String get iapProductMissing =>
+      'ไม่พบการซื้อในแอป โปรดผูก pro_unlock กับเวอร์ชันนี้ใน App Store Connect และส่งเข้าระบบตรวจสอบ';
+
+  @override
   String get photoPreview => 'ตัวอย่างรูปภาพ';
 
   @override

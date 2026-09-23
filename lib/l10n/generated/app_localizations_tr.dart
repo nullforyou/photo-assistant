@@ -84,6 +84,10 @@ class STr extends S {
       'Mağaza kullanılamıyor. Lütfen daha sonra tekrar deneyin.';
 
   @override
+  String get iapProductMissing =>
+      'Uygulama içi satın alma bulunamadı. App Store Connect\'te pro_unlock ürününü bu sürüme bağlayıp incelemeye gönderin.';
+
+  @override
   String get photoPreview => 'Foto Önizleme';
 
   @override

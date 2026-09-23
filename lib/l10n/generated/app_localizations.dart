@@ -240,6 +240,12 @@ abstract class S {
   /// **'Store is unavailable. Please try again later.'**
   String get storeUnavailable;
 
+  /// No description provided for @iapProductMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'In-app purchase not found. In App Store Connect, attach \'pro_unlock\' to this version and submit for review.'**
+  String get iapProductMissing;
+
   /// No description provided for @photoPreview.
   ///
   /// In en, this message translates to:

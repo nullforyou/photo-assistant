@@ -45,6 +45,7 @@
     }
   },
   "storeUnavailable": "Mağaza kullanılamıyor. Lütfen daha sonra tekrar deneyin.",
+  "iapProductMissing": "Uygulama içi satın alma bulunamadı. App Store Connect'te pro_unlock ürününü bu sürüme bağlayıp incelemeye gönderin.",
   "photoPreview": "Foto Önizleme",
   "retake": "Yeniden çek",
   "save": "Kaydet",

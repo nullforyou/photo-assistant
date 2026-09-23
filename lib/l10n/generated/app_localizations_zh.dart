@@ -83,6 +83,10 @@ class SZh extends S {
   String get storeUnavailable => '商店暂不可用，请稍后再试。';
 
   @override
+  String get iapProductMissing =>
+      '未找到内购商品：请在 App Store Connect 把 pro_unlock 关联到本版本并提交审核。';
+
+  @override
   String get photoPreview => '照片预览';
 
   @override
@@ -191,6 +195,10 @@ class SZhHant extends SZh {
 
   @override
   String get storeUnavailable => '商店暫不可用，請稍後再試。';
+
+  @override
+  String get iapProductMissing =>
+      '未找到內購商品：請在 App Store Connect 把 pro_unlock 關聯到本版本並提交審核。';
 
   @override
   String get photoPreview => '照片預覽';

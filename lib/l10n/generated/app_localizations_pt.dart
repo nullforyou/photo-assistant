@@ -85,6 +85,10 @@ class SPt extends S {
       'A loja está indisponível. Tente novamente mais tarde.';
 
   @override
+  String get iapProductMissing =>
+      'Compra integrada não encontrada. No App Store Connect, associe o „pro_unlock“ a esta versão e envie para revisão.';
+
+  @override
   String get photoPreview => 'Pré-visualização';
 
   @override

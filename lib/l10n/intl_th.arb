@@ -45,6 +45,7 @@
     }
   },
   "storeUnavailable": "สโตร์ไม่พร้อมใช้งาน กรุณาลองใหม่ภายหลัง",
+  "iapProductMissing": "ไม่พบการซื้อในแอป โปรดผูก pro_unlock กับเวอร์ชันนี้ใน App Store Connect และส่งเข้าระบบตรวจสอบ",
   "photoPreview": "ตัวอย่างรูปภาพ",
   "retake": "ถ่ายใหม่",
   "save": "บันทึก",

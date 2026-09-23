@@ -84,6 +84,10 @@ class SEn extends S {
       'Store is unavailable. Please try again later.';
 
   @override
+  String get iapProductMissing =>
+      'In-app purchase not found. In App Store Connect, attach \'pro_unlock\' to this version and submit for review.';
+
+  @override
   String get photoPreview => 'Photo Preview';
 
   @override
