@@ -12,6 +12,39 @@
   "cameraUnavailable": "Kamera kullanılamıyor",
   "retry": "Tekrar dene",
   "back": "Geri",
+  "unlockAllPoses": "Tüm Pozların Kilidini Aç",
+  "unlockAllPosesBody": "Her stilde {count} poz daha kilidini açar. Tek seferlik alım, sonsuza kadar.",
+  "@unlockAllPosesBody": {
+    "description": "unlockAllPosesBody",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "buyForPrice": "Kilidi Aç — {price}",
+  "@buyForPrice": {
+    "description": "buyForPrice",
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "restorePurchase": "Satın Almayı Geri Yükle",
+  "purchasePending": "Satın alma sürüyor…",
+  "purchaseSuccess": "Tüm pozların kilidi açıldı",
+  "purchaseRestored": "Satın alma geri yüklendi",
+  "purchaseFailed": "Satın alma başarısız: {error}",
+  "@purchaseFailed": {
+    "description": "purchaseFailed",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "storeUnavailable": "Mağaza kullanılamıyor. Lütfen daha sonra tekrar deneyin.",
   "photoPreview": "Foto Önizleme",
   "retake": "Yeniden çek",
   "save": "Kaydet",

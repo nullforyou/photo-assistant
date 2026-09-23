@@ -51,6 +51,40 @@ class SFr extends S {
   String get back => 'Retour';
 
   @override
+  String get unlockAllPoses => 'Débloquer toutes les poses';
+
+  @override
+  String unlockAllPosesBody(String count) {
+    return 'Débloque $count poses supplémentaires dans chaque style. Achat unique, à jamais.';
+  }
+
+  @override
+  String buyForPrice(String price) {
+    return 'Débloquer — $price';
+  }
+
+  @override
+  String get restorePurchase => 'Restaurer l\'achat';
+
+  @override
+  String get purchasePending => 'Achat en cours…';
+
+  @override
+  String get purchaseSuccess => 'Toutes les poses sont débloquées';
+
+  @override
+  String get purchaseRestored => 'Achat restauré';
+
+  @override
+  String purchaseFailed(String error) {
+    return 'Échec de l\'achat : $error';
+  }
+
+  @override
+  String get storeUnavailable =>
+      'Le store est indisponible. Veuillez réessayer plus tard.';
+
+  @override
   String get photoPreview => 'Aperçu photo';
 
   @override

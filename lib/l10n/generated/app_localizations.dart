@@ -186,6 +186,60 @@ abstract class S {
   /// **'Back'**
   String get back;
 
+  /// No description provided for @unlockAllPoses.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock All Poses'**
+  String get unlockAllPoses;
+
+  /// unlockAllPosesBody
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock {count} more poses with every style. One-time purchase, yours forever.'**
+  String unlockAllPosesBody(String count);
+
+  /// buyForPrice
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock — {price}'**
+  String buyForPrice(String price);
+
+  /// No description provided for @restorePurchase.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore Purchase'**
+  String get restorePurchase;
+
+  /// No description provided for @purchasePending.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase in progress…'**
+  String get purchasePending;
+
+  /// No description provided for @purchaseSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'All poses unlocked'**
+  String get purchaseSuccess;
+
+  /// No description provided for @purchaseRestored.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase restored'**
+  String get purchaseRestored;
+
+  /// purchaseFailed
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase failed: {error}'**
+  String purchaseFailed(String error);
+
+  /// No description provided for @storeUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Store is unavailable. Please try again later.'**
+  String get storeUnavailable;
+
   /// No description provided for @photoPreview.
   ///
   /// In en, this message translates to:

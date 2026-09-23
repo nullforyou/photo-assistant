@@ -51,6 +51,40 @@ class SPt extends S {
   String get back => 'Voltar';
 
   @override
+  String get unlockAllPoses => 'Desbloquear todas as poses';
+
+  @override
+  String unlockAllPosesBody(String count) {
+    return 'Desbloqueia mais $count poses em cada estilo. Compra única, para sempre.';
+  }
+
+  @override
+  String buyForPrice(String price) {
+    return 'Desbloquear — $price';
+  }
+
+  @override
+  String get restorePurchase => 'Restaurar compra';
+
+  @override
+  String get purchasePending => 'Compra em andamento…';
+
+  @override
+  String get purchaseSuccess => 'Todas as poses desbloqueadas';
+
+  @override
+  String get purchaseRestored => 'Compra restaurada';
+
+  @override
+  String purchaseFailed(String error) {
+    return 'Falha na compra: $error';
+  }
+
+  @override
+  String get storeUnavailable =>
+      'A loja está indisponível. Tente novamente mais tarde.';
+
+  @override
   String get photoPreview => 'Pré-visualização';
 
   @override

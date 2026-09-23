@@ -50,6 +50,39 @@ class SKo extends S {
   String get back => '뒤로';
 
   @override
+  String get unlockAllPoses => '모든 포즈 잠금 해제';
+
+  @override
+  String unlockAllPosesBody(String count) {
+    return '모든 스타일의 포즈 $count개를 추가로 잠금 해제합니다. 한 번 구매하면 영구적으로 사용할 수 있습니다.';
+  }
+
+  @override
+  String buyForPrice(String price) {
+    return '잠금 해제 — $price';
+  }
+
+  @override
+  String get restorePurchase => '구매 복원';
+
+  @override
+  String get purchasePending => '구매 처리 중…';
+
+  @override
+  String get purchaseSuccess => '모든 포즈 잠금 해제됨';
+
+  @override
+  String get purchaseRestored => '구매가 복원되었습니다';
+
+  @override
+  String purchaseFailed(String error) {
+    return '구매 실패: $error';
+  }
+
+  @override
+  String get storeUnavailable => '스토어를 사용할 수 없습니다. 나중에 다시 시도해 주세요.';
+
+  @override
   String get photoPreview => '사진 미리보기';
 
   @override

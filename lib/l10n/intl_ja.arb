@@ -12,6 +12,39 @@
   "cameraUnavailable": "カメラは使用できません",
   "retry": "再試行",
   "back": "戻る",
+  "unlockAllPoses": "すべてのポーズのロックを解除",
+  "unlockAllPosesBody": "すべてのスタイルのポーズがあと {count} 種類ロック解除できます。一度の購入で永久にご利用いただけます。",
+  "@unlockAllPosesBody": {
+    "description": "unlockAllPosesBody",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "buyForPrice": "ロック解除 — {price}",
+  "@buyForPrice": {
+    "description": "buyForPrice",
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "restorePurchase": "購入を復元",
+  "purchasePending": "購入処理中…",
+  "purchaseSuccess": "すべてのポーズが解除されました",
+  "purchaseRestored": "購入を復元しました",
+  "purchaseFailed": "購入に失敗しました：{error}",
+  "@purchaseFailed": {
+    "description": "purchaseFailed",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "storeUnavailable": "ストアは利用できません。後ほど再度お試しください。",
   "photoPreview": "写真プレビュー",
   "retake": "撮り直し",
   "save": "保存",

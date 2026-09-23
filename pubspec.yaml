@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.0+3
+version: 1.1.0+4
 
 environment:
   sdk: ^3.13.1
@@ -44,6 +44,10 @@ dependencies:
   saver_gallery: ^5.1.0
   # 相册权限预检 + 跳转系统设置（保存被拒时引导用户开启）
   permission_handler: ^11.3.1
+  # 应用内购买：非消耗型一次性解锁（pro_unlock），纯本地验证，无需自建后端
+  in_app_purchase: ^3.1.9
+  # 本地安全存储解锁状态（Keychain / EncryptedSharedPreferences）
+  flutter_secure_storage: ^9.2.0
 
   # 相机预览与拍照
   # Web 端保存图片用到官方推荐的 package:web（替代已弃用的 dart:html）

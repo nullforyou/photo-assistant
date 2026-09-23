@@ -12,6 +12,39 @@
   "cameraUnavailable": "Caméra indisponible",
   "retry": "Réessayer",
   "back": "Retour",
+  "unlockAllPoses": "Débloquer toutes les poses",
+  "unlockAllPosesBody": "Débloque {count} poses supplémentaires dans chaque style. Achat unique, à jamais.",
+  "@unlockAllPosesBody": {
+    "description": "unlockAllPosesBody",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "buyForPrice": "Débloquer — {price}",
+  "@buyForPrice": {
+    "description": "buyForPrice",
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "restorePurchase": "Restaurer l'achat",
+  "purchasePending": "Achat en cours…",
+  "purchaseSuccess": "Toutes les poses sont débloquées",
+  "purchaseRestored": "Achat restauré",
+  "purchaseFailed": "Échec de l'achat : {error}",
+  "@purchaseFailed": {
+    "description": "purchaseFailed",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "storeUnavailable": "Le store est indisponible. Veuillez réessayer plus tard.",
   "photoPreview": "Aperçu photo",
   "retake": "Reprendre",
   "save": "Enregistrer",

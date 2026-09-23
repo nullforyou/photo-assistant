@@ -50,6 +50,39 @@ class SZh extends S {
   String get back => '返回';
 
   @override
+  String get unlockAllPoses => '解锁全部姿势';
+
+  @override
+  String unlockAllPosesBody(String count) {
+    return '再解锁 $count 个姿势，包含每种风格。一次购买，永久使用。';
+  }
+
+  @override
+  String buyForPrice(String price) {
+    return '解锁 — $price';
+  }
+
+  @override
+  String get restorePurchase => '恢复购买';
+
+  @override
+  String get purchasePending => '购买处理中…';
+
+  @override
+  String get purchaseSuccess => '已全部解锁';
+
+  @override
+  String get purchaseRestored => '购买已恢复';
+
+  @override
+  String purchaseFailed(String error) {
+    return '购买失败：$error';
+  }
+
+  @override
+  String get storeUnavailable => '商店暂不可用，请稍后再试。';
+
+  @override
   String get photoPreview => '照片预览';
 
   @override
@@ -125,6 +158,39 @@ class SZhHant extends SZh {
 
   @override
   String get back => '返回';
+
+  @override
+  String get unlockAllPoses => '解鎖全部姿勢';
+
+  @override
+  String unlockAllPosesBody(String count) {
+    return '再解鎖 $count 個姿勢，包含每種風格。一次購買，永久使用。';
+  }
+
+  @override
+  String buyForPrice(String price) {
+    return '解鎖 — $price';
+  }
+
+  @override
+  String get restorePurchase => '恢復購買';
+
+  @override
+  String get purchasePending => '購買處理中…';
+
+  @override
+  String get purchaseSuccess => '已全部解鎖';
+
+  @override
+  String get purchaseRestored => '購買已恢復';
+
+  @override
+  String purchaseFailed(String error) {
+    return '購買失敗：$error';
+  }
+
+  @override
+  String get storeUnavailable => '商店暫不可用，請稍後再試。';
 
   @override
   String get photoPreview => '照片預覽';

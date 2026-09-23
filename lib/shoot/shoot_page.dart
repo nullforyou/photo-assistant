@@ -7,6 +7,9 @@ import 'package:photo_assistant/l10n/generated/app_localizations.dart';
 
 import '../api/api.dart';
 import '../poses/pose_library.dart';
+import '../store/paywall.dart';
+import '../theme/brand.dart';
+import '../store/purchase_service.dart';
 import 'photo_preview_page.dart';
 import 'pose_painter.dart';
 
@@ -32,6 +35,9 @@ class _ShootPageState extends State<ShootPage>
   /// 本地打包的完整数据包（单机版唯一数据源）。
   PoseResult _result = PoseApi.defaultResult;
   List<Pose> _poses = PoseApi.defaultResult.poses;
+
+  /// 内购服务（单例）。
+  final PurchaseService _purchase = PurchaseService.instance;
 
   /// 本地数据是否已加载完成。未加载完成前不渲染 tips，
   /// 避免加载瞬间闪出一个“默认 tip”。
@@ -63,11 +69,20 @@ class _ShootPageState extends State<ShootPage>
     WidgetsBinding.instance.addObserver(this);
     _initCamera();
     _loadPoses();
+    _initPurchase();
   }
+
+  void _initPurchase() {
+    _purchase.init();
+    _purchase.unlocked.addListener(_onPurchaseUnlocked);
+  }
+
+  void _onPurchaseUnlocked() => setState(() {});
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    _purchase.unlocked.removeListener(_onPurchaseUnlocked);
     _controller?.dispose();
     super.dispose();
   }
@@ -437,12 +452,17 @@ class _ShootPageState extends State<ShootPage>
                         SizedBox(width: _result.thumbnail.itemSpacing),
                     itemBuilder: (context, index) {
                       final selected = index == _safeIndex;
+                      // 免费版仅开放前 kFreePoseLimit 个姿势；其余加锁。
+                      final locked = !_purchase.unlocked.value &&
+                          index >= kFreePoseLimit;
                       return GestureDetector(
-                        onTap: () => setState(() {
-                          _selectedPose = index;
-                          _poseScale = 1.0;
-                          _poseOffset = Offset.zero;
-                        }),
+                        onTap: locked
+                            ? () => showPaywall(context)
+                            : () => setState(() {
+                                _selectedPose = index;
+                                _poseScale = 1.0;
+                                _poseOffset = Offset.zero;
+                              }),
                         child: Container(
                           width: _result.thumbnail.itemWidth,
                           height: _result.thumbnail.itemHeight,
@@ -456,23 +476,61 @@ class _ShootPageState extends State<ShootPage>
                               width: selected ? 2 : 1,
                             ),
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(4),
-                            child: _PoseLayer(
-                              pose: _poses[index],
-                              style: style,
-                              fillRatio: 0.9,
-                              showKeyPoints: false,
-                              showFill: false,
-                              userScale: 1.0,
-                              userOffset: Offset.zero,
-                            ),
+                          child: Stack(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(4),
+                                child: _PoseLayer(
+                                  pose: _poses[index],
+                                  style: style,
+                                  fillRatio: 0.9,
+                                  showKeyPoints: false,
+                                  showFill: false,
+                                  userScale: 1.0,
+                                  userOffset: Offset.zero,
+                                ),
+                              ),
+                              if (locked)
+                                Positioned.fill(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.black.withValues(alpha: 0.5),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: const Center(
+                                      child: Icon(Icons.lock_rounded,
+                                          color: Colors.white70, size: 20),
+                                    ),
+                                  ),
+                                ),
+                            ],
                           ),
                         ),
                       );
                     },
                   ),
           ),
+          // 免费版：在缩略图条上方放一个「解锁全部」入口
+          if (!_purchase.unlocked.value) ...[
+            const SizedBox(height: 10),
+            Center(
+              child: OutlinedButton.icon(
+                onPressed: () => showPaywall(context),
+                icon: const Icon(Icons.lock_open_rounded, size: 16),
+                label: Text(S.of(context).unlockAllPoses),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: kBrandPinkDeep,
+                  side: const BorderSide(color: kBrandPinkDeep),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
+                  textStyle: const TextStyle(fontSize: 13),
+                ),
+              ),
+            ),
+          ],
           const SizedBox(height: 16),
           // 快门按钮
           GestureDetector(

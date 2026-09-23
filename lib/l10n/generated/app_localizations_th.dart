@@ -50,6 +50,39 @@ class STh extends S {
   String get back => 'กลับ';
 
   @override
+  String get unlockAllPoses => 'ปลดล็อกท่าทางทั้งหมด';
+
+  @override
+  String unlockAllPosesBody(String count) {
+    return 'ปลดล็อกท่าทางเพิ่มอีก $count แบบในทุกสไตล์ ซื้อครั้งเดียว ใช้ได้ตลอดไป';
+  }
+
+  @override
+  String buyForPrice(String price) {
+    return 'ปลดล็อก — $price';
+  }
+
+  @override
+  String get restorePurchase => 'กู้คืนการซื้อ';
+
+  @override
+  String get purchasePending => 'กำลังดำเนินการซื้อ…';
+
+  @override
+  String get purchaseSuccess => 'ปลดล็อกท่าทางทั้งหมดแล้ว';
+
+  @override
+  String get purchaseRestored => 'กู้คืนการซื้อแล้ว';
+
+  @override
+  String purchaseFailed(String error) {
+    return 'การซื้อล้มเหลว: $error';
+  }
+
+  @override
+  String get storeUnavailable => 'สโตร์ไม่พร้อมใช้งาน กรุณาลองใหม่ภายหลัง';
+
+  @override
   String get photoPreview => 'ตัวอย่างรูปภาพ';
 
   @override

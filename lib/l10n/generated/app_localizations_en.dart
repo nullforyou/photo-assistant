@@ -50,6 +50,40 @@ class SEn extends S {
   String get back => 'Back';
 
   @override
+  String get unlockAllPoses => 'Unlock All Poses';
+
+  @override
+  String unlockAllPosesBody(String count) {
+    return 'Unlock $count more poses with every style. One-time purchase, yours forever.';
+  }
+
+  @override
+  String buyForPrice(String price) {
+    return 'Unlock — $price';
+  }
+
+  @override
+  String get restorePurchase => 'Restore Purchase';
+
+  @override
+  String get purchasePending => 'Purchase in progress…';
+
+  @override
+  String get purchaseSuccess => 'All poses unlocked';
+
+  @override
+  String get purchaseRestored => 'Purchase restored';
+
+  @override
+  String purchaseFailed(String error) {
+    return 'Purchase failed: $error';
+  }
+
+  @override
+  String get storeUnavailable =>
+      'Store is unavailable. Please try again later.';
+
+  @override
   String get photoPreview => 'Photo Preview';
 
   @override

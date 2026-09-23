@@ -51,6 +51,40 @@ class SEs extends S {
   String get back => 'Atrás';
 
   @override
+  String get unlockAllPoses => 'Desbloquear todas las poses';
+
+  @override
+  String unlockAllPosesBody(String count) {
+    return 'Desbloquea $count poses más de cada estilo. Compra única, para siempre.';
+  }
+
+  @override
+  String buyForPrice(String price) {
+    return 'Desbloquear — $price';
+  }
+
+  @override
+  String get restorePurchase => 'Restaurar compra';
+
+  @override
+  String get purchasePending => 'Compra en curso…';
+
+  @override
+  String get purchaseSuccess => 'Todas las poses desbloqueadas';
+
+  @override
+  String get purchaseRestored => 'Compra restaurada';
+
+  @override
+  String purchaseFailed(String error) {
+    return 'Error en la compra: $error';
+  }
+
+  @override
+  String get storeUnavailable =>
+      'La tienda no está disponible. Inténtalo de nuevo más tarde.';
+
+  @override
   String get photoPreview => 'Vista previa';
 
   @override

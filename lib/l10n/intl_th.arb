@@ -12,6 +12,39 @@
   "cameraUnavailable": "กล้องไม่พร้อมใช้งาน",
   "retry": "ลองอีกครั้ง",
   "back": "กลับ",
+  "unlockAllPoses": "ปลดล็อกท่าทางทั้งหมด",
+  "unlockAllPosesBody": "ปลดล็อกท่าทางเพิ่มอีก {count} แบบในทุกสไตล์ ซื้อครั้งเดียว ใช้ได้ตลอดไป",
+  "@unlockAllPosesBody": {
+    "description": "unlockAllPosesBody",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "buyForPrice": "ปลดล็อก — {price}",
+  "@buyForPrice": {
+    "description": "buyForPrice",
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "restorePurchase": "กู้คืนการซื้อ",
+  "purchasePending": "กำลังดำเนินการซื้อ…",
+  "purchaseSuccess": "ปลดล็อกท่าทางทั้งหมดแล้ว",
+  "purchaseRestored": "กู้คืนการซื้อแล้ว",
+  "purchaseFailed": "การซื้อล้มเหลว: {error}",
+  "@purchaseFailed": {
+    "description": "purchaseFailed",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "storeUnavailable": "สโตร์ไม่พร้อมใช้งาน กรุณาลองใหม่ภายหลัง",
   "photoPreview": "ตัวอย่างรูปภาพ",
   "retake": "ถ่ายใหม่",
   "save": "บันทึก",

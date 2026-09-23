@@ -12,6 +12,39 @@
   "cameraUnavailable": "攝像頭不可用",
   "retry": "重試",
   "back": "返回",
+  "unlockAllPoses": "解鎖全部姿勢",
+  "unlockAllPosesBody": "再解鎖 {count} 個姿勢，包含每種風格。一次購買，永久使用。",
+  "@unlockAllPosesBody": {
+    "description": "unlockAllPosesBody",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "buyForPrice": "解鎖 — {price}",
+  "@buyForPrice": {
+    "description": "buyForPrice",
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "restorePurchase": "恢復購買",
+  "purchasePending": "購買處理中…",
+  "purchaseSuccess": "已全部解鎖",
+  "purchaseRestored": "購買已恢復",
+  "purchaseFailed": "購買失敗：{error}",
+  "@purchaseFailed": {
+    "description": "purchaseFailed",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "storeUnavailable": "商店暫不可用，請稍後再試。",
   "photoPreview": "照片預覽",
   "retake": "重拍",
   "save": "保存",

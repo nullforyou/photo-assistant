@@ -28,6 +28,39 @@
   "cameraUnavailable": "Camera unavailable",
   "retry": "Retry",
   "back": "Back",
+  "unlockAllPoses": "Unlock All Poses",
+  "unlockAllPosesBody": "Unlock {count} more poses with every style. One-time purchase, yours forever.",
+  "@unlockAllPosesBody": {
+    "description": "unlockAllPosesBody",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "buyForPrice": "Unlock — {price}",
+  "@buyForPrice": {
+    "description": "buyForPrice",
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "restorePurchase": "Restore Purchase",
+  "purchasePending": "Purchase in progress…",
+  "purchaseSuccess": "All poses unlocked",
+  "purchaseRestored": "Purchase restored",
+  "purchaseFailed": "Purchase failed: {error}",
+  "@purchaseFailed": {
+    "description": "purchaseFailed",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "storeUnavailable": "Store is unavailable. Please try again later.",
   "photoPreview": "Photo Preview",
   "retake": "Retake",
   "save": "Save",

@@ -12,6 +12,39 @@
   "cameraUnavailable": "카메라를 사용할 수 없습니다",
   "retry": "다시 시도",
   "back": "뒤로",
+  "unlockAllPoses": "모든 포즈 잠금 해제",
+  "unlockAllPosesBody": "모든 스타일의 포즈 {count}개를 추가로 잠금 해제합니다. 한 번 구매하면 영구적으로 사용할 수 있습니다.",
+  "@unlockAllPosesBody": {
+    "description": "unlockAllPosesBody",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "buyForPrice": "잠금 해제 — {price}",
+  "@buyForPrice": {
+    "description": "buyForPrice",
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "restorePurchase": "구매 복원",
+  "purchasePending": "구매 처리 중…",
+  "purchaseSuccess": "모든 포즈 잠금 해제됨",
+  "purchaseRestored": "구매가 복원되었습니다",
+  "purchaseFailed": "구매 실패: {error}",
+  "@purchaseFailed": {
+    "description": "purchaseFailed",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "storeUnavailable": "스토어를 사용할 수 없습니다. 나중에 다시 시도해 주세요.",
   "photoPreview": "사진 미리보기",
   "retake": "다시 찍기",
   "save": "저장",

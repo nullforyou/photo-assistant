@@ -50,6 +50,39 @@ class SJa extends S {
   String get back => '戻る';
 
   @override
+  String get unlockAllPoses => 'すべてのポーズのロックを解除';
+
+  @override
+  String unlockAllPosesBody(String count) {
+    return 'すべてのスタイルのポーズがあと $count 種類ロック解除できます。一度の購入で永久にご利用いただけます。';
+  }
+
+  @override
+  String buyForPrice(String price) {
+    return 'ロック解除 — $price';
+  }
+
+  @override
+  String get restorePurchase => '購入を復元';
+
+  @override
+  String get purchasePending => '購入処理中…';
+
+  @override
+  String get purchaseSuccess => 'すべてのポーズが解除されました';
+
+  @override
+  String get purchaseRestored => '購入を復元しました';
+
+  @override
+  String purchaseFailed(String error) {
+    return '購入に失敗しました：$error';
+  }
+
+  @override
+  String get storeUnavailable => 'ストアは利用できません。後ほど再度お試しください。';
+
+  @override
   String get photoPreview => '写真プレビュー';
 
   @override

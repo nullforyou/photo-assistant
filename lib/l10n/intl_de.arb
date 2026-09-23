@@ -12,6 +12,39 @@
   "cameraUnavailable": "Kamera nicht verfügbar",
   "retry": "Wiederholen",
   "back": "Zurück",
+  "unlockAllPoses": "Alle Posen freischalten",
+  "unlockAllPosesBody": "Schaltet {count} weitere Posen in jedem Stil frei. Einmalige Zahlung, für immer.",
+  "@unlockAllPosesBody": {
+    "description": "unlockAllPosesBody",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "buyForPrice": "Freischalten — {price}",
+  "@buyForPrice": {
+    "description": "buyForPrice",
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "restorePurchase": "Kauf wiederherstellen",
+  "purchasePending": "Kauf läuft…",
+  "purchaseSuccess": "Alle Posen freigeschaltet",
+  "purchaseRestored": "Kauf wiederhergestellt",
+  "purchaseFailed": "Kauf fehlgeschlagen: {error}",
+  "@purchaseFailed": {
+    "description": "purchaseFailed",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "storeUnavailable": "Store ist nicht verfügbar. Bitte versuchen Sie es später erneut.",
   "photoPreview": "Foto-Vorschau",
   "retake": "Neu aufnehmen",
   "save": "Speichern",

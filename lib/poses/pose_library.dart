@@ -1,5 +1,9 @@
 import 'dart:ui';
 
+/// 免费版可使用的姿势数量上限；超出部分需通过 pro_unlock 内购解锁。
+/// 前 [kFreePoseLimit] 个姿势（pose_001 起）始终免费可用。
+const int kFreePoseLimit = 5;
+
 /// 按 [lang] 从 i18n 映射取文案；缺失则返回默认字段（中文 name）。
 String _i18nName(Map<String, dynamic> json, String field, String i18nField, String lang) {
   final i18n = json[i18nField];

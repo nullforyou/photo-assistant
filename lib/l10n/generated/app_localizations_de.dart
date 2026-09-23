@@ -51,6 +51,40 @@ class SDe extends S {
   String get back => 'Zurück';
 
   @override
+  String get unlockAllPoses => 'Alle Posen freischalten';
+
+  @override
+  String unlockAllPosesBody(String count) {
+    return 'Schaltet $count weitere Posen in jedem Stil frei. Einmalige Zahlung, für immer.';
+  }
+
+  @override
+  String buyForPrice(String price) {
+    return 'Freischalten — $price';
+  }
+
+  @override
+  String get restorePurchase => 'Kauf wiederherstellen';
+
+  @override
+  String get purchasePending => 'Kauf läuft…';
+
+  @override
+  String get purchaseSuccess => 'Alle Posen freigeschaltet';
+
+  @override
+  String get purchaseRestored => 'Kauf wiederhergestellt';
+
+  @override
+  String purchaseFailed(String error) {
+    return 'Kauf fehlgeschlagen: $error';
+  }
+
+  @override
+  String get storeUnavailable =>
+      'Store ist nicht verfügbar. Bitte versuchen Sie es später erneut.';
+
+  @override
   String get photoPreview => 'Foto-Vorschau';
 
   @override

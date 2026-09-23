@@ -50,6 +50,40 @@ class STr extends S {
   String get back => 'Geri';
 
   @override
+  String get unlockAllPoses => 'Tüm Pozların Kilidini Aç';
+
+  @override
+  String unlockAllPosesBody(String count) {
+    return 'Her stilde $count poz daha kilidini açar. Tek seferlik alım, sonsuza kadar.';
+  }
+
+  @override
+  String buyForPrice(String price) {
+    return 'Kilidi Aç — $price';
+  }
+
+  @override
+  String get restorePurchase => 'Satın Almayı Geri Yükle';
+
+  @override
+  String get purchasePending => 'Satın alma sürüyor…';
+
+  @override
+  String get purchaseSuccess => 'Tüm pozların kilidi açıldı';
+
+  @override
+  String get purchaseRestored => 'Satın alma geri yüklendi';
+
+  @override
+  String purchaseFailed(String error) {
+    return 'Satın alma başarısız: $error';
+  }
+
+  @override
+  String get storeUnavailable =>
+      'Mağaza kullanılamıyor. Lütfen daha sonra tekrar deneyin.';
+
+  @override
   String get photoPreview => 'Foto Önizleme';
 
   @override
