@@ -41,6 +41,9 @@ class PurchaseService {
   /// 初始化时是否发生过错误（如商店不可用），仅供 UI 提示。
   String? lastError;
 
+  /// 最近一次 queryProductDetails 的诊断信息（请求参数 + 结果），供调试 UI 展示。
+  final ValueNotifier<String?> lastDiagnostic = ValueNotifier<String?>(null);
+
   StreamSubscription<List<PurchaseDetails>>? _purchaseSub;
 
   /// 首次初始化：读取本地解锁状态、探测商店、拉取商品价格、订阅购买流。
@@ -53,22 +56,47 @@ class PurchaseService {
     } catch (e) {
       _storeAvailable = false;
       lastError = e.toString();
+      lastDiagnostic.value =
+          'isAvailable 异常: ${e.toString()}\n→ 已跳过 queryProductDetails（未发起任何请求）';
+      return;
     }
-    if (!_storeAvailable) return;
+    if (!_storeAvailable) {
+      lastDiagnostic.value =
+          'storeAvailable=false（isAvailable 返回 false）\n→ 未发起 queryProductDetails 请求';
+      return;
+    }
 
     try {
+      final sw = Stopwatch()..start();
       final resp = await _iap.queryProductDetails({kProUnlockProductId});
+      sw.stop();
+      final buf = StringBuffer();
+      buf.writeln(
+          '▶ 请求: queryProductDetails(identifiers={$kProUnlockProductId})');
+      buf.writeln('⏱ 耗时: ${sw.elapsedMilliseconds} ms');
+      buf.writeln('storeAvailable(isAvailable): true');
+      buf.writeln('返回商品数: ${resp.productDetails.length}');
+      if (resp.productDetails.isNotEmpty) {
+        buf.writeln(
+            '返回商品ID: ${resp.productDetails.map((p) => '${p.id}(${p.price})').join(', ')}');
+      }
+      buf.writeln(
+          'notFoundIDs: ${resp.notFoundIDs.isEmpty ? '(空)' : resp.notFoundIDs.join(', ')}');
+      lastDiagnostic.value = buf.toString();
       if (resp.productDetails.isNotEmpty) {
         _product = resp.productDetails.firstWhere(
           (p) => p.id == kProUnlockProductId,
           orElse: () => resp.productDetails.first,
         );
-      } else if (resp.notFoundIDs.contains(kProUnlockProductId)) {
+      } else {
         // Apple 明确返回「该商品不存在或尚未关联到当前版本」
-        lastError = 'pro_unlock not returned by StoreKit';
+        lastError =
+            'pro_unlock not returned by StoreKit (notFoundIDs=${resp.notFoundIDs})';
       }
     } catch (e) {
       lastError = e.toString();
+      lastDiagnostic.value =
+          '✗ queryProductDetails 异常: ${e.toString()}\n→ 请求已发起但失败';
     }
 
     _purchaseSub?.cancel();
@@ -141,5 +169,6 @@ class PurchaseService {
   Future<void> dispose() async {
     await _purchaseSub?.cancel();
     _purchaseSub = null;
+    lastDiagnostic.dispose();
   }
 }

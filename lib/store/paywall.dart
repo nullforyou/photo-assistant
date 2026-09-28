@@ -41,12 +41,18 @@ class _PaywallSheetState extends State<_PaywallSheet> {
     widget.ps.statusMessage.addListener(_onStatus);
     // 进入付费墙时再刷新一次商品详情，避免初始化时 StoreKit 未就绪导致一直空
     widget.ps.init();
+    widget.ps.lastDiagnostic.addListener(_onDiagnostic);
+  }
+
+  void _onDiagnostic() {
+    if (mounted) setState(() {});
   }
 
   @override
   void dispose() {
     widget.ps.unlocked.removeListener(_onUnlocked);
     widget.ps.statusMessage.removeListener(_onStatus);
+    widget.ps.lastDiagnostic.removeListener(_onDiagnostic);
     super.dispose();
   }
 
@@ -199,6 +205,26 @@ class _PaywallSheetState extends State<_PaywallSheet> {
               style: const TextStyle(color: kMutedPlum),
             ),
           ),
+          if (ps.lastDiagnostic.value != null) ...[
+            const SizedBox(height: 12),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade100,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                ps.lastDiagnostic.value!,
+                style: const TextStyle(
+                  fontSize: 11,
+                  fontFamily: 'monospace',
+                  color: Colors.black87,
+                  height: 1.4,
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );
