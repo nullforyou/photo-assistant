@@ -82,17 +82,22 @@ class PurchaseService {
       }
       buf.writeln(
           'notFoundIDs: ${resp.notFoundIDs.isEmpty ? '(空)' : resp.notFoundIDs.join(', ')}');
-      lastDiagnostic.value = buf.toString();
       if (resp.productDetails.isNotEmpty) {
-        _product = resp.productDetails.firstWhere(
-          (p) => p.id == kProUnlockProductId,
-          orElse: () => resp.productDetails.first,
-        );
+        try {
+          // 避免 orElse 在 iOS AppStoreProduct2Details 子类型上触发运行时类型错误
+          _product = resp.productDetails.firstWhere(
+            (p) => p.id == kProUnlockProductId,
+          );
+          buf.writeln('✓ 已匹配到当前商品');
+        } catch (parseErr) {
+          buf.writeln('✗ 解析商品异常: $parseErr');
+        }
       } else {
         // Apple 明确返回「该商品不存在或尚未关联到当前版本」
         lastError =
             'pro_unlock not returned by StoreKit (notFoundIDs=${resp.notFoundIDs})';
       }
+      lastDiagnostic.value = buf.toString();
     } catch (e) {
       lastError = e.toString();
       lastDiagnostic.value =
