@@ -32,6 +32,7 @@
     }
   },
   "restorePurchase": "กู้คืนการซื้อ",
+  "noPurchaseToRestore": "ไม่พบการซื้อก่อนหน้า",
   "purchasePending": "กำลังดำเนินการซื้อ…",
   "purchaseSuccess": "ปลดล็อกท่าทางทั้งหมดแล้ว",
   "purchaseRestored": "กู้คืนการซื้อแล้ว",

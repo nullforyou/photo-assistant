@@ -32,6 +32,7 @@
     }
   },
   "restorePurchase": "恢復購買",
+  "noPurchaseToRestore": "未找到可恢復的購買",
   "purchasePending": "購買處理中…",
   "purchaseSuccess": "已全部解鎖",
   "purchaseRestored": "購買已恢復",

@@ -67,6 +67,9 @@ class SFr extends S {
   String get restorePurchase => 'Restaurer l\'achat';
 
   @override
+  String get noPurchaseToRestore => 'Aucun achat précédent trouvé';
+
+  @override
   String get purchasePending => 'Achat en cours…';
 
   @override

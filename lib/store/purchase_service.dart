@@ -11,6 +11,9 @@ const String kProUnlockProductId = 'com.chunyanyang.photoassistant.pro_unlock';
 /// 本地存储解锁状态的 key（持久化于 Keychain / EncryptedSharedPreferences）。
 const String _kUnlockedStorageKey = 'pro_unlock_granted_v1';
 
+/// 恢复购买时用于向 UI 传递「未找到可恢复的购买」的哨兵值。
+const String _kNoPurchaseToRestore = 'noPurchaseToRestore';
+
 /// 内购服务（单例）。
 ///
 /// 纯本地 App 也能做 IAP：付款与收据验证由 Apple / Google 在设备本地完成，
@@ -38,13 +41,10 @@ class PurchaseService {
   ProductDetails? get product => _product;
   ProductDetails? _product;
 
-  /// 初始化时是否发生过错误（如商店不可用），仅供 UI 提示。
-  String? lastError;
-
-  /// 最近一次 queryProductDetails 的诊断信息（请求参数 + 结果），供调试 UI 展示。
-  final ValueNotifier<String?> lastDiagnostic = ValueNotifier<String?>(null);
-
   StreamSubscription<List<PurchaseDetails>>? _purchaseSub;
+
+  /// 最近一次恢复购买流程中是否找到过历史购买，用于判断「未找到可恢复的购买」。
+  bool _restoreFound = false;
 
   /// 首次初始化：读取本地解锁状态、探测商店、拉取商品价格、订阅购买流。
   Future<void> init() async {
@@ -55,53 +55,20 @@ class PurchaseService {
       _storeAvailable = await _iap.isAvailable();
     } catch (e) {
       _storeAvailable = false;
-      lastError = e.toString();
-      lastDiagnostic.value =
-          'isAvailable 异常: ${e.toString()}\n→ 已跳过 queryProductDetails（未发起任何请求）';
       return;
     }
-    if (!_storeAvailable) {
-      lastDiagnostic.value =
-          'storeAvailable=false（isAvailable 返回 false）\n→ 未发起 queryProductDetails 请求';
-      return;
-    }
+    if (!_storeAvailable) return;
 
     try {
-      final sw = Stopwatch()..start();
       final resp = await _iap.queryProductDetails({kProUnlockProductId});
-      sw.stop();
-      final buf = StringBuffer();
-      buf.writeln(
-          '▶ 请求: queryProductDetails(identifiers={$kProUnlockProductId})');
-      buf.writeln('⏱ 耗时: ${sw.elapsedMilliseconds} ms');
-      buf.writeln('storeAvailable(isAvailable): true');
-      buf.writeln('返回商品数: ${resp.productDetails.length}');
       if (resp.productDetails.isNotEmpty) {
-        buf.writeln(
-            '返回商品ID: ${resp.productDetails.map((p) => '${p.id}(${p.price})').join(', ')}');
+        // 避免 orElse 在 iOS AppStoreProduct2Details 子类型上触发运行时类型错误
+        _product = resp.productDetails.firstWhere(
+          (p) => p.id == kProUnlockProductId,
+        );
       }
-      buf.writeln(
-          'notFoundIDs: ${resp.notFoundIDs.isEmpty ? '(空)' : resp.notFoundIDs.join(', ')}');
-      if (resp.productDetails.isNotEmpty) {
-        try {
-          // 避免 orElse 在 iOS AppStoreProduct2Details 子类型上触发运行时类型错误
-          _product = resp.productDetails.firstWhere(
-            (p) => p.id == kProUnlockProductId,
-          );
-          buf.writeln('✓ 已匹配到当前商品');
-        } catch (parseErr) {
-          buf.writeln('✗ 解析商品异常: $parseErr');
-        }
-      } else {
-        // Apple 明确返回「该商品不存在或尚未关联到当前版本」
-        lastError =
-            'pro_unlock not returned by StoreKit (notFoundIDs=${resp.notFoundIDs})';
-      }
-      lastDiagnostic.value = buf.toString();
     } catch (e) {
-      lastError = e.toString();
-      lastDiagnostic.value =
-          '✗ queryProductDetails 异常: ${e.toString()}\n→ 请求已发起但失败';
+      // 查询失败不影响后续购买/恢复入口；付费墙会按 product==null 给出提示
     }
 
     _purchaseSub?.cancel();
@@ -115,10 +82,10 @@ class PurchaseService {
     for (final d in details) {
       if (d.status == PurchaseStatus.purchased ||
           d.status == PurchaseStatus.restored) {
+        if (d.status == PurchaseStatus.restored) _restoreFound = true;
         _grant();
       } else if (d.status == PurchaseStatus.error) {
-        lastError = d.error?.message ?? 'purchase error';
-        statusMessage.value = lastError;
+        statusMessage.value = d.error?.message ?? 'purchase error';
       } else if (d.status == PurchaseStatus.pending) {
         statusMessage.value = 'pending';
       }
@@ -154,26 +121,31 @@ class PurchaseService {
         purchaseParam: PurchaseParam(productDetails: p),
       );
     } catch (e) {
-      lastError = e.toString();
-      statusMessage.value = lastError;
+      statusMessage.value = e.toString();
     }
     return unlocked.value;
   }
 
   /// 恢复购买（Apple 强制要求提供入口）。
+  ///
+  /// 恢复流程结束且未找到任何可恢复的购买时，向 UI 发送「未找到可恢复的购买」提示。
   Future<void> restore() async {
     if (!_storeAvailable) return;
+    _restoreFound = false;
     try {
       await _iap.restorePurchases();
     } catch (e) {
-      lastError = e.toString();
-      statusMessage.value = lastError;
+      statusMessage.value = e.toString();
+      return;
+    }
+    if (!_restoreFound && !unlocked.value) {
+      // 恢复完成但没有找到任何历史购买
+      statusMessage.value = _kNoPurchaseToRestore;
     }
   }
 
   Future<void> dispose() async {
     await _purchaseSub?.cancel();
     _purchaseSub = null;
-    lastDiagnostic.dispose();
   }
 }

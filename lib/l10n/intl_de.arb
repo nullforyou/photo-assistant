@@ -32,6 +32,7 @@
     }
   },
   "restorePurchase": "Kauf wiederherstellen",
+  "noPurchaseToRestore": "Kein vorheriger Kauf gefunden",
   "purchasePending": "Kauf läuft…",
   "purchaseSuccess": "Alle Posen freigeschaltet",
   "purchaseRestored": "Kauf wiederhergestellt",

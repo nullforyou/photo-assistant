@@ -66,6 +66,9 @@ class STh extends S {
   String get restorePurchase => 'กู้คืนการซื้อ';
 
   @override
+  String get noPurchaseToRestore => 'ไม่พบการซื้อก่อนหน้า';
+
+  @override
   String get purchasePending => 'กำลังดำเนินการซื้อ…';
 
   @override

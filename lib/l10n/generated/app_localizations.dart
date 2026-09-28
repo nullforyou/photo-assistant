@@ -210,6 +210,12 @@ abstract class S {
   /// **'Restore Purchase'**
   String get restorePurchase;
 
+  /// No description provided for @noPurchaseToRestore.
+  ///
+  /// In en, this message translates to:
+  /// **'No previous purchase found'**
+  String get noPurchaseToRestore;
+
   /// No description provided for @purchasePending.
   ///
   /// In en, this message translates to:

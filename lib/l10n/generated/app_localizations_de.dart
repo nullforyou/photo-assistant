@@ -67,6 +67,9 @@ class SDe extends S {
   String get restorePurchase => 'Kauf wiederherstellen';
 
   @override
+  String get noPurchaseToRestore => 'Kein vorheriger Kauf gefunden';
+
+  @override
   String get purchasePending => 'Kauf läuft…';
 
   @override

@@ -32,6 +32,7 @@
     }
   },
   "restorePurchase": "購入を復元",
+  "noPurchaseToRestore": "以前の購入が見つかりません",
   "purchasePending": "購入処理中…",
   "purchaseSuccess": "すべてのポーズが解除されました",
   "purchaseRestored": "購入を復元しました",

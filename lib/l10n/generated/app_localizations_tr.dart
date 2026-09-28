@@ -66,6 +66,9 @@ class STr extends S {
   String get restorePurchase => 'Satın Almayı Geri Yükle';
 
   @override
+  String get noPurchaseToRestore => 'Önceki bir satın alma bulunamadı';
+
+  @override
   String get purchasePending => 'Satın alma sürüyor…';
 
   @override

@@ -48,6 +48,7 @@
     }
   },
   "restorePurchase": "Restore Purchase",
+  "noPurchaseToRestore": "No previous purchase found",
   "purchasePending": "Purchase in progress…",
   "purchaseSuccess": "All poses unlocked",
   "purchaseRestored": "Purchase restored",

@@ -32,6 +32,7 @@
     }
   },
   "restorePurchase": "Restaurar compra",
+  "noPurchaseToRestore": "No se encontró una compra anterior",
   "purchasePending": "Compra en curso…",
   "purchaseSuccess": "Todas las poses desbloqueadas",
   "purchaseRestored": "Compra restaurada",

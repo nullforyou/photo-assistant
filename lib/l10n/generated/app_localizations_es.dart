@@ -67,6 +67,9 @@ class SEs extends S {
   String get restorePurchase => 'Restaurar compra';
 
   @override
+  String get noPurchaseToRestore => 'No se encontró una compra anterior';
+
+  @override
   String get purchasePending => 'Compra en curso…';
 
   @override

@@ -32,6 +32,7 @@
     }
   },
   "restorePurchase": "Satın Almayı Geri Yükle",
+  "noPurchaseToRestore": "Önceki bir satın alma bulunamadı",
   "purchasePending": "Satın alma sürüyor…",
   "purchaseSuccess": "Tüm pozların kilidi açıldı",
   "purchaseRestored": "Satın alma geri yüklendi",

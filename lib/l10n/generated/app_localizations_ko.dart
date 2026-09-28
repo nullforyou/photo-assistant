@@ -66,6 +66,9 @@ class SKo extends S {
   String get restorePurchase => '구매 복원';
 
   @override
+  String get noPurchaseToRestore => '이전 구매 내역을 찾을 수 없습니다';
+
+  @override
   String get purchasePending => '구매 처리 중…';
 
   @override

@@ -16,6 +16,7 @@
   "unlockAllPosesBody": "再解锁 {count} 个姿势，包含每种风格。一次购买，永久使用。",
   "buyForPrice": "解锁 — {price}",
   "restorePurchase": "恢复购买",
+  "noPurchaseToRestore": "未找到可恢复的购买",
   "purchasePending": "购买处理中…",
   "purchaseSuccess": "已全部解锁",
   "purchaseRestored": "购买已恢复",

@@ -66,6 +66,9 @@ class SZh extends S {
   String get restorePurchase => '恢复购买';
 
   @override
+  String get noPurchaseToRestore => '未找到可恢复的购买';
+
+  @override
   String get purchasePending => '购买处理中…';
 
   @override
@@ -178,6 +181,9 @@ class SZhHant extends SZh {
 
   @override
   String get restorePurchase => '恢復購買';
+
+  @override
+  String get noPurchaseToRestore => '未找到可恢復的購買';
 
   @override
   String get purchasePending => '購買處理中…';

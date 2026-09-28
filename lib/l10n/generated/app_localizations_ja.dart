@@ -66,6 +66,9 @@ class SJa extends S {
   String get restorePurchase => '購入を復元';
 
   @override
+  String get noPurchaseToRestore => '以前の購入が見つかりません';
+
+  @override
   String get purchasePending => '購入処理中…';
 
   @override

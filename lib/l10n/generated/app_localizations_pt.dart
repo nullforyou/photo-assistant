@@ -67,6 +67,9 @@ class SPt extends S {
   String get restorePurchase => 'Restaurar compra';
 
   @override
+  String get noPurchaseToRestore => 'Nenhuma compra anterior encontrada';
+
+  @override
   String get purchasePending => 'Compra em andamento…';
 
   @override
