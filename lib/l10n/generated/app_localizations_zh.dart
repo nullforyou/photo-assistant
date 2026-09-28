@@ -84,7 +84,7 @@ class SZh extends S {
 
   @override
   String get iapProductMissing =>
-      '未找到内购商品：请在 App Store Connect 把 pro_unlock 关联到本版本并提交审核。';
+      '未找到内购商品：请在 App Store Connect 把 pro_unlock_v2 关联到本版本并提交审核。';
 
   @override
   String get photoPreview => '照片预览';
@@ -198,7 +198,7 @@ class SZhHant extends SZh {
 
   @override
   String get iapProductMissing =>
-      '未找到內購商品：請在 App Store Connect 把 pro_unlock 關聯到本版本並提交審核。';
+      '未找到內購商品：請在 App Store Connect 把 pro_unlock_v2 關聯到本版本並提交審核。';
 
   @override
   String get photoPreview => '照片預覽';

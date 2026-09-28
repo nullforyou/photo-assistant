@@ -85,7 +85,7 @@ class STr extends S {
 
   @override
   String get iapProductMissing =>
-      'Uygulama içi satın alma bulunamadı. App Store Connect\'te pro_unlock ürününü bu sürüme bağlayıp incelemeye gönderin.';
+      'Uygulama içi satın alma bulunamadı. App Store Connect\'te pro_unlock_v2 ürününü bu sürüme bağlayıp incelemeye gönderin.';
 
   @override
   String get photoPreview => 'Foto Önizleme';

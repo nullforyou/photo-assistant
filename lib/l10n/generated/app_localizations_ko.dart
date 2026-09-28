@@ -84,7 +84,7 @@ class SKo extends S {
 
   @override
   String get iapProductMissing =>
-      '인앱 결제를 찾을 수 없습니다. App Store Connect에서 pro_unlock을 이 버전에 연결하고 심사에 제출하세요.';
+      '인앱 결제를 찾을 수 없습니다. App Store Connect에서 pro_unlock_v2을 이 버전에 연결하고 심사에 제출하세요.';
 
   @override
   String get photoPreview => '사진 미리보기';

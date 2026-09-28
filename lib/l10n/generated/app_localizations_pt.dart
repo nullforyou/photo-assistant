@@ -86,7 +86,7 @@ class SPt extends S {
 
   @override
   String get iapProductMissing =>
-      'Compra integrada não encontrada. No App Store Connect, associe o „pro_unlock“ a esta versão e envie para revisão.';
+      'Compra integrada não encontrada. No App Store Connect, associe o „pro_unlock_v2“ a esta versão e envie para revisão.';
 
   @override
   String get photoPreview => 'Pré-visualização';

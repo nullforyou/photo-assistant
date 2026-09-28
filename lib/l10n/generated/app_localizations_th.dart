@@ -84,7 +84,7 @@ class STh extends S {
 
   @override
   String get iapProductMissing =>
-      'ไม่พบการซื้อในแอป โปรดผูก pro_unlock กับเวอร์ชันนี้ใน App Store Connect และส่งเข้าระบบตรวจสอบ';
+      'ไม่พบการซื้อในแอป โปรดผูก pro_unlock_v2 กับเวอร์ชันนี้ใน App Store Connect และส่งเข้าระบบตรวจสอบ';
 
   @override
   String get photoPreview => 'ตัวอย่างรูปภาพ';

@@ -86,7 +86,7 @@ class SFr extends S {
 
   @override
   String get iapProductMissing =>
-      'Achat intégré introuvable. Dans App Store Connect, associez « pro_unlock » à cette version et soumettez-la pour révision.';
+      'Achat intégré introuvable. Dans App Store Connect, associez « pro_unlock_v2 » à cette version et soumettez-la pour révision.';
 
   @override
   String get photoPreview => 'Aperçu photo';
