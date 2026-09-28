@@ -6,7 +6,7 @@ import 'package:in_app_purchase/in_app_purchase.dart';
 
 /// App Store Connect 中创建的非消耗型产品 ID（一次性买断，永久解锁全部姿势）。
 /// 在 App Store Connect → Monetization → In-App Purchases 创建，类型 Non-Consumable。
-const String kProUnlockProductId = 'com.chunyanyang.photoassistant.pro_unlock_v2';
+const String kProUnlockProductId = 'com.chunyanyang.photoassistant.pro_unlock';
 
 /// 本地存储解锁状态的 key（持久化于 Keychain / EncryptedSharedPreferences）。
 const String _kUnlockedStorageKey = 'pro_unlock_granted_v1';
@@ -34,7 +34,7 @@ class PurchaseService {
   bool get storeAvailable => _storeAvailable;
   bool _storeAvailable = false;
 
-  /// 当前加载到的 pro_unlock_v2 商品详情（含本地货币价格）。未加载完成时为 null。
+  /// 当前加载到的 pro_unlock 商品详情（含本地货币价格）。未加载完成时为 null。
   ProductDetails? get product => _product;
   ProductDetails? _product;
 

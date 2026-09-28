@@ -84,7 +84,7 @@ class SJa extends S {
 
   @override
   String get iapProductMissing =>
-      'アプリ内購入が見つかりません。App Store Connect で pro_unlock_v2 をこのバージョンに紐づけ、審査に提出してください。';
+      'アプリ内購入が見つかりません。App Store Connect で pro_unlock をこのバージョンに紐づけ、審査に提出してください。';
 
   @override
   String get photoPreview => '写真プレビュー';

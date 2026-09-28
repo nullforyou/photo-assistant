@@ -86,7 +86,7 @@ class SEs extends S {
 
   @override
   String get iapProductMissing =>
-      'No se encontró la compra integrada. En App Store Connect, vincula «pro_unlock_v2» a esta versión y envíala a revisión.';
+      'No se encontró la compra integrada. En App Store Connect, vincula «pro_unlock» a esta versión y envíala a revisión.';
 
   @override
   String get photoPreview => 'Vista previa';

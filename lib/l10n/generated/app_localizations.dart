@@ -243,7 +243,7 @@ abstract class S {
   /// No description provided for @iapProductMissing.
   ///
   /// In en, this message translates to:
-  /// **'In-app purchase not found. In App Store Connect, attach \'pro_unlock_v2\' to this version and submit for review.'**
+  /// **'In-app purchase not found. In App Store Connect, attach \'pro_unlock\' to this version and submit for review.'**
   String get iapProductMissing;
 
   /// No description provided for @photoPreview.
