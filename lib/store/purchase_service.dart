@@ -63,6 +63,9 @@ class PurchaseService {
           (p) => p.id == kProUnlockProductId,
           orElse: () => resp.productDetails.first,
         );
+      } else if (resp.notFoundIDs.contains(kProUnlockProductId)) {
+        // Apple 明确返回「该商品不存在或尚未关联到当前版本」
+        lastError = 'pro_unlock not returned by StoreKit';
       }
     } catch (e) {
       lastError = e.toString();
@@ -102,9 +105,14 @@ class PurchaseService {
   /// 发起购买（非消耗型一次性解锁）。
   /// 返回是否最终已解锁；无法购买（无商品 / 商店不可用）时返回当前状态。
   Future<bool> buy() async {
-    final p = _product;
+    var p = _product;
+    if (p == null && _storeAvailable) {
+      // 商品未加载成功时先刷新一次（可能初始化时 StoreKit 尚未就绪）
+      await init();
+      p = _product;
+    }
     if (p == null || !_storeAvailable) {
-      // 没拿到商品详情时尝试恢复一次（也许之前买过）
+      // 仍然没拿到商品时尝试恢复（也许之前买过）
       await restore();
       return unlocked.value;
     }

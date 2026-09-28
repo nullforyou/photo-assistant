@@ -39,6 +39,8 @@ class _PaywallSheetState extends State<_PaywallSheet> {
     // 解锁状态变化（购买/恢复成功）时关闭弹层
     widget.ps.unlocked.addListener(_onUnlocked);
     widget.ps.statusMessage.addListener(_onStatus);
+    // 进入付费墙时再刷新一次商品详情，避免初始化时 StoreKit 未就绪导致一直空
+    widget.ps.init();
   }
 
   @override
@@ -180,9 +182,20 @@ class _PaywallSheetState extends State<_PaywallSheet> {
           ],
           const SizedBox(height: 10),
           TextButton(
-            onPressed: _buying ? null : () => ps.restore(),
+            onPressed: _buying
+                ? null
+                : () async {
+                    if (ps.product == null) {
+                      // 商品未加载到时，先尝试刷新；刷新后仍无商品再尝试恢复
+                      setState(() => _buying = true);
+                      await ps.init();
+                      if (mounted) setState(() => _buying = false);
+                    } else {
+                      ps.restore();
+                    }
+                  },
             child: Text(
-              s.restorePurchase,
+              ps.product == null ? s.retry : s.restorePurchase,
               style: const TextStyle(color: kMutedPlum),
             ),
           ),
