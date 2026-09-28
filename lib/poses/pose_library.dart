@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-/// 免费版可使用的姿势数量上限；超出部分需通过 pro_unlock 内购解锁。
+/// 免费版可使用的姿势数量上限；超出部分需通过 pro_unlock_v2 内购解锁。
 /// 前 [kFreePoseLimit] 个姿势（pose_001 起）始终免费可用。
 const int kFreePoseLimit = 5;
 

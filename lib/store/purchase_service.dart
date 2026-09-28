@@ -34,7 +34,7 @@ class PurchaseService {
   bool get storeAvailable => _storeAvailable;
   bool _storeAvailable = false;
 
-  /// 当前加载到的 pro_unlock 商品详情（含本地货币价格）。未加载完成时为 null。
+  /// 当前加载到的 pro_unlock_v2 商品详情（含本地货币价格）。未加载完成时为 null。
   ProductDetails? get product => _product;
   ProductDetails? _product;
 
